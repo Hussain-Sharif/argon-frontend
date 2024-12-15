@@ -67,10 +67,9 @@ export const Login=()=>{
         const fetchedData=await response.json()
         if(response.ok===true){
             console.log(fetchedData.data.jwtToken,"It's True==>",fetchedData)
-            Cookies.set("jwtToken",fetchedData.data.jwtToken)
+            Cookies.set("jwtTokenData",JSON.stringify(fetchedData.data))
             setApiResponse({inProgress:false})
-            navigate("/")
-
+            navigate("/",{replace:true})
         }else{
             console.log("Error ==>",fetchedData)
             setApiResponse({isError:true,errorMsg:fetchedData.message,inProgress:false})
@@ -91,21 +90,19 @@ export const Login=()=>{
                             <CardDescription>Please enter your credentials</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <form>
                             <div className="grid w-full items-center gap-4">
                                 <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="name">Email</Label>
-                                <Input id="name" value={email} onChange={onEmailChangeValue} placeholder="Enter you Email to login" />
+                                <Input id="name" value={email} onChange={onEmailChangeValue} placeholder="Enter your Email to login" />
                                 </div>
                                 <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="password">Password</Label>
-                                <Input id="password" value={password} onChange={onPasswordChangeValue} type="password" placeholder="Name of your password" />
+                                <Input id="password" value={password} onChange={onPasswordChangeValue} type="password" placeholder="Enter your password" />
                                 </div>
                             </div>
-                            </form>
                         </CardContent>
                         <CardFooter className="flex justify-between">
-                            <Button type="button" variant="outline" >Register As User</Button>
+                            <Button type="button" variant="outline" onClick={()=>{navigate("/register")}} >Register As User</Button>
                             <Button type="submit" disabled={apiResponse.inProgress}>{apiResponse.inProgress && <Loader2 className="animate-spin" />} Login</Button>
                         </CardFooter>
                         {apiResponse.errorMsg && <ReUseText color="red" fS="2px" pl="5px">*{apiResponse.errorMsg}</ReUseText>}
@@ -124,17 +121,17 @@ export const Login=()=>{
                         <div className="grid w-full items-center gap-4">
                             <div className="flex flex-col space-y-1.5">
                             <Label htmlFor="name">Email</Label>
-                            <Input id="name" value={email} onChange={onEmailChangeValue} placeholder="Enter you Email to login" />
+                            <Input id="name" value={email} onChange={onEmailChangeValue} placeholder="Enter your Email to login" />
                             </div>
                             <div className="flex flex-col space-y-1.5">
                             <Label htmlFor="password">Password</Label>
-                            <Input id="password" type="password" value={password} onChange={onPasswordChangeValue} placeholder="Name of your password" />
+                            <Input id="password" type="password" value={password} onChange={onPasswordChangeValue} placeholder="Enter your password" />
                             </div>
                         </div>
                         </form>
                     </CardContent>
                     <CardFooter className="flex justify-between">
-                        <Button type="button" variant="outline">Register As Vendor</Button>
+                        <Button type="button" variant="outline" onClick={()=>{navigate("/register")}}>Register As Vendor</Button>
                         <Button type="submit" disabled={apiResponse.inProgress}>{apiResponse.inProgress && <Loader2 className="animate-spin" />} Login</Button>
                     </CardFooter>
                     {apiResponse.errorMsg && <ReUseText color="red" fS="2px" pl="5px">*{apiResponse.errorMsg}</ReUseText>}
