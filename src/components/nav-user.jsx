@@ -31,14 +31,14 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import Cookies from "js-cookie"
 
 export function NavUser({
-  user
+  user,onLogout
 }) {
   const { isMobile } = useSidebar()
   const navigate=useNavigate()
 
+  // console.log({user})
   return (
     (<SidebarMenu>
       <SidebarMenuItem>
@@ -49,13 +49,13 @@ export function NavUser({
               className="border-2 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className="rounded-lg">{(user.name[0]+user.name[1]).toUpperCase()}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold sm:inline hidden">{user.name}</span>
                 <span className="truncate text-xs sm:inline hidden">{user.email}</span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4 sm:block hidden" />
+              <ChevronsUpDown className="ml-auto size-4 " />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -67,7 +67,7 @@ export function NavUser({
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">{(user.name[0]+user.name[1]).toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user.name}</span>
@@ -78,9 +78,8 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuItem >
               <button className="w-full text-base flex flex-row justify-start items-center" type="button" 
-              onClick={()=>{
-              Cookies.remove("jwtTokenData")
-              navigate("/")
+              onClick={()=>{              
+              onLogout()
             }} >
               <LogOut className="mr-2"/> Log out
               </button>

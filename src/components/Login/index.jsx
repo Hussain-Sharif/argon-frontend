@@ -67,7 +67,7 @@ export const Login=()=>{
         const fetchedData=await response.json()
         if(response.ok===true){
             console.log(fetchedData.data.jwtToken,"It's True==>",fetchedData)
-            Cookies.set("jwtTokenData",JSON.stringify(fetchedData.data))
+            Cookies.set("jwtTokenData",JSON.stringify(fetchedData.data),{ expires: 7, path: '/' })
             setApiResponse({inProgress:false})
             navigate("/",{replace:true})
         }else{

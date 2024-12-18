@@ -5,16 +5,34 @@ import { Button } from "../ui/button"
 import { LogInIcon, LogOutIcon } from "lucide-react"
 import { NavUser } from "../nav-user"
 import { SidebarProvider } from "../ui/sidebar"
+import { useState } from "react"
 
 
 export const Header=()=>{
     const navigate=useNavigate()
-    let cookieData=Cookies.get("jwtTokenData")
-     cookieData=JSON.parse(cookieData)
+    const [isLoggedOut, setIsLoggedOut] = useState(false);
+
+    const handleLogout = () => {
+        console.log("Button Is clicked as LogOut")
+        console.log("Before removing cookie:", Cookies.get("jwtTokenData")); // Debugging
+        Cookies.remove("jwtTokenData",{path: '/',domain:window.location.hostname}); // Include path
+        console.log("After removing cookie:", Cookies.get("jwtTokenData")); // Check removal
+        setIsLoggedOut(true); // Trigger to re-render this component
+        navigate("/",{replace:true})
+    };
+
+
+    let cookieData=Cookies.get("jwtTokenData") || false
+
+    if (cookieData && !isLoggedOut) {
+        cookieData=JSON.parse(cookieData)
+     console.log("Cookie Data from Header Component:",{cookieData})
+      }
+     
      const userData={
-        name:cookieData.username ||cookieData.name,
-        email:cookieData.email,
-        avatar:cookieData.image ||""
+        name:cookieData?.username ||cookieData?.name,
+        email:cookieData?.email,
+        avatar:cookieData?.image ||""
      }
      const {jwtToken}=cookieData
     return(
@@ -23,10 +41,10 @@ export const Header=()=>{
             <ReUseDiv>
                 {jwtToken?
                 <ReUseDiv>
-                        <SidebarProvider className="">
-                            <NavUser user={userData}/> 
-                        </SidebarProvider>
-                       
+                    <SidebarProvider className="">
+                        <NavUser user={userData} onLogout={handleLogout}/> 
+                    </SidebarProvider>
+                    
                 </ReUseDiv> : 
                 <ReUseDiv className="flex flex-row justify-end " > 
                     <Button  className="md:block hidden" type="button" onClick={()=>{navigate("/login")}} >Login</Button>
