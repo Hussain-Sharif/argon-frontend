@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/sidebar"
 
 export function NavUser({
-  user,onLogout
+  user,handleLogout
 }) {
   const { isMobile } = useSidebar()
   const navigate=useNavigate()
@@ -79,7 +79,7 @@ export function NavUser({
             <DropdownMenuItem >
               <button className="w-full text-base flex flex-row justify-start items-center" type="button" 
               onClick={()=>{              
-              onLogout()
+                handleLogout()
             }} >
               <LogOut className="mr-2"/> Log out
               </button>

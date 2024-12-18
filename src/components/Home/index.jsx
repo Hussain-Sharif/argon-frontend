@@ -2,6 +2,8 @@ import { trefoil } from 'ldrs'
 import { Header } from "../Header"
 import { useEffect, useState } from "react"
 import Cookies from "js-cookie"
+import { useNavigate } from 'react-router-dom'
+import { Hero } from '../Hero'
 
 trefoil.register()
 
@@ -13,20 +15,32 @@ const allApiSituations={
 }
 
 export const Home=()=>{
+      const navigate=useNavigate()
 
   const [allCities,setAllCities]=useState([])
   const [apiSituation,setApiSituation]=useState(allApiSituations.inital)
+  const [isLoggedOut, setIsLoggedOut] = useState(false);
+
+    const handleLogout = () => {
+        console.log("Button Is clicked as LogOut")
+        console.log("Before removing cookie:", Cookies.get("jwtTokenData")); // Debugging
+        Cookies.remove("jwtTokenData",{path: '/',domain:window.location.hostname}); // Include path
+        console.log("After removing cookie:", Cookies.get("jwtTokenData")); // Check removal
+        setIsLoggedOut(true); // Trigger to re-render this component
+        // navigate("/",{replace:true})
+    };
 
   useEffect(()=>{
     const getAllCities=async()=>{
         setApiSituation(allApiSituations.inProgress)
         let cookieData=Cookies.get("jwtTokenData")
         let jwtToken;
-        if(cookieData){
+        console.log(cookieData && !isLoggedOut,cookieData,!isLoggedOut)
+        if(cookieData && !isLoggedOut){
           cookieData=JSON.parse(cookieData)
           jwtToken=cookieData.jwtToken
         }
-        console.log("In hero:",{jwtToken})
+        console.log("In home:",{jwtToken})
         const urlAllCities="https://argonbackend-production.up.railway.app/api/v1/city/all-cities"
         const options={
           method:"GET",
@@ -59,7 +73,7 @@ export const Home=()=>{
     return(
       <div className='flex h-screen w-screen flex-col justify-center items-center'>
           <l-trefoil
-    size="40"
+    size="45"
     stroke="4"
     stroke-length="0.15"
     bg-opacity="0.1"
@@ -71,16 +85,8 @@ export const Home=()=>{
   }
     return (
       <>
-        <Header/>
-        {
-          allApiSituations.success==apiSituation?<div>
-            It's Success
-          </div>:
-          <div>
-            It's Failure
-          </div>
-        }
-        
+        <Header isLoggedOut={isLoggedOut} handleLogout={handleLogout}/>
+        <Hero allCities={allCities} isLoggedOut={isLoggedOut}/>        
       </>
     )
 }

@@ -2,27 +2,19 @@ import Cookies from "js-cookie"
 import { useNavigate } from "react-router-dom"
 import { ReUseDiv, ReUseImage } from "../ReusableStyledComponents"
 import { Button } from "../ui/button"
-import { LogInIcon, LogOutIcon } from "lucide-react"
+import { LogInIcon,  NotebookPen } from "lucide-react"
 import { NavUser } from "../nav-user"
 import { SidebarProvider } from "../ui/sidebar"
-import { useState } from "react"
 
 
-export const Header=()=>{
+export const Header=(props)=>{
+    const {handleLogout,isLoggedOut}=props
     const navigate=useNavigate()
-    const [isLoggedOut, setIsLoggedOut] = useState(false);
+    
 
-    const handleLogout = () => {
-        console.log("Button Is clicked as LogOut")
-        console.log("Before removing cookie:", Cookies.get("jwtTokenData")); // Debugging
-        Cookies.remove("jwtTokenData",{path: '/',domain:window.location.hostname}); // Include path
-        console.log("After removing cookie:", Cookies.get("jwtTokenData")); // Check removal
-        setIsLoggedOut(true); // Trigger to re-render this component
-        navigate("/",{replace:true})
-    };
-
-
+    
     let cookieData=Cookies.get("jwtTokenData") || false
+    console.log("Header islogout ",isLoggedOut,cookieData)
 
     if (cookieData && !isLoggedOut) {
         cookieData=JSON.parse(cookieData)
@@ -42,7 +34,7 @@ export const Header=()=>{
                 {jwtToken?
                 <ReUseDiv>
                     <SidebarProvider className="">
-                        <NavUser user={userData} onLogout={handleLogout}/> 
+                        <NavUser user={userData} handleLogout={handleLogout}/> 
                     </SidebarProvider>
                     
                 </ReUseDiv> : 
@@ -50,7 +42,7 @@ export const Header=()=>{
                     <Button  className="md:block hidden" type="button" onClick={()=>{navigate("/login")}} >Login</Button>
                     <Button className="ml-2 md:block hidden" type="button" variant="outline"  onClick={()=>{navigate("/register")}} >Sign Up/Register</Button>
                     <Button  className="md:hidden block" type="button" onClick={()=>{navigate("/login")}} > <LogInIcon/> </Button>
-                    <Button className="ml-1 md:hidden block" type="button" variant="outline"  onClick={()=>{navigate("/register")}} ><LogOutIcon/> </Button>
+                    <Button className="ml-1 md:hidden block" type="button" variant="outline"  onClick={()=>{navigate("/register")}} ><NotebookPen/> </Button>
                     </ReUseDiv> }
             </ReUseDiv>
         </ReUseDiv>
