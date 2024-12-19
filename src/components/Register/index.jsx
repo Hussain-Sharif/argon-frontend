@@ -267,7 +267,7 @@ export const Register = () => {
                                 <div className="grid w-full items-center gap-4">
                                     <div className="flex flex-col space-y-1.5">
                                         <Label htmlFor="name">Email</Label>
-                                        <Input id="name" value={email} onChange={onEmailChangeValue} placeholder="Enter your Email" />
+                                        <Input id="name" value={email} onChange={onEmailChangeValue} type="email" placeholder="Enter your Email" />
                                     </div>
                                     <div className="flex flex-col space-y-1.5">
                                         <Label htmlFor="username">Username</Label>

@@ -1,11 +1,11 @@
-import { trefoil } from 'ldrs'
 import { Header } from "../Header"
 import { useEffect, useState } from "react"
 import Cookies from "js-cookie"
 import { useNavigate } from 'react-router-dom'
 import { Hero } from '../Hero'
+import { LoadingAnime } from '@/app/Loader/loadingAnime'
 
-trefoil.register()
+
 
 const allApiSituations={
   inital:"INITIAL",
@@ -18,9 +18,17 @@ export const Home=()=>{
       const navigate=useNavigate()
 
   const [allCities,setAllCities]=useState([])
+  const [allSpecfiedCityAreas,setAllSpecfiedCityAreas]=useState([])
   const [apiSituation,setApiSituation]=useState(allApiSituations.inital)
   const [isLoggedOut, setIsLoggedOut] = useState(false);
 
+  let cookieData=Cookies.get("jwtTokenData")
+  let jwtToken;
+  console.log(cookieData && !isLoggedOut,cookieData,!isLoggedOut)
+  if(cookieData && !isLoggedOut){
+    cookieData=JSON.parse(cookieData)
+    jwtToken=cookieData.jwtToken
+  }
     const handleLogout = () => {
         console.log("Button Is clicked as LogOut")
         console.log("Before removing cookie:", Cookies.get("jwtTokenData")); // Debugging
@@ -33,13 +41,6 @@ export const Home=()=>{
   useEffect(()=>{
     const getAllCities=async()=>{
         setApiSituation(allApiSituations.inProgress)
-        let cookieData=Cookies.get("jwtTokenData")
-        let jwtToken;
-        console.log(cookieData && !isLoggedOut,cookieData,!isLoggedOut)
-        if(cookieData && !isLoggedOut){
-          cookieData=JSON.parse(cookieData)
-          jwtToken=cookieData.jwtToken
-        }
         console.log("In home:",{jwtToken})
         const urlAllCities="https://argonbackend-production.up.railway.app/api/v1/city/all-cities"
         const options={
@@ -58,7 +59,7 @@ export const Home=()=>{
             cityName:eachCityObj.city_name,
             ...eachCityObj
           }))
-          console.log(formatedData)
+          // console.log(formatedData)
           setApiSituation(allApiSituations.success)
           setAllCities(formatedData)
         }else{
@@ -69,24 +70,38 @@ export const Home=()=>{
     getAllCities()
   },[])
 
-  if(allApiSituations.inProgress==apiSituation){
-    return(
-      <div className='flex h-screen w-screen flex-col justify-center items-center'>
-          <l-trefoil
-    size="45"
-    stroke="4"
-    stroke-length="0.15"
-    bg-opacity="0.1"
-    speed="1.4" 
-    color="black" 
-  ></l-trefoil>
-      </div>
-    )
-  }
+  const onCityClick=async(cityId)=>{
+    const specifiedCityAreasApiUrl="https://argonbackend-production.up.railway.app/api/v1/city/chosen-city-area"
+    
+    const options={
+      method:"POST",
+      headers:{
+        "content-type":"application/json",
+        "authorization":`Bearer ${jwtToken}`
+      },
+      body:JSON.stringify({specificCityId:cityId})
+    }
+
+    const request=await fetch(specifiedCityAreasApiUrl,options)
+    const response=await request.json()
+    if(request.ok){
+      setApiSituation(allApiSituations.success)
+      setAllSpecfiedCityAreas({response})
+    }else{
+      setApiSituation(allApiSituations.failure)
+      console.log("Error ==>",{response})
+    }
+}
+    if(allApiSituations.inProgress===apiSituation){
+      return <LoadingAnime className="w-full"/>
+    }
+
+    console.log({allCities,allSpecfiedCityAreas,isLoggedOut,apiSituation})
+  
     return (
       <>
         <Header isLoggedOut={isLoggedOut} handleLogout={handleLogout}/>
-        <Hero allCities={allCities} isLoggedOut={isLoggedOut}/>        
+          <Hero allCities={allCities} onCityClick={onCityClick} isLoggedOut={isLoggedOut}/>              
       </>
     )
 }
