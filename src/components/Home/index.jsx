@@ -27,7 +27,7 @@ export const Home=()=>{
         Cookies.remove("jwtTokenData",{path: '/',domain:window.location.hostname}); // Include path
         console.log("After removing cookie:", Cookies.get("jwtTokenData")); // Check removal
         setIsLoggedOut(true); // Trigger to re-render this component
-        // navigate("/",{replace:true})
+        setAllCities([])
     };
 
   useEffect(()=>{
