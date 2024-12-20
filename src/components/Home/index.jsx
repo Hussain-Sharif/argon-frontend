@@ -8,7 +8,7 @@ import { LoadingAnime } from '@/app/Loader/loadingAnime'
 
 
 const allApiSituations={
-  inital:"INITIAL",
+  initial:"INITIAL",
   inProgress:"LOADING",
   success:"SUCCESS",
   failure:"FAILURE"
@@ -19,7 +19,8 @@ export const Home=()=>{
 
   const [allCities,setAllCities]=useState([])
   const [allSpecfiedCityAreas,setAllSpecfiedCityAreas]=useState([])
-  const [apiSituation,setApiSituation]=useState(allApiSituations.inital)
+  const [apiSituation,setApiSituation]=useState(allApiSituations.initial)
+  const [areaApiSituation,setAreaApiSituations]=useState(allApiSituations.initial)
   const [isLoggedOut, setIsLoggedOut] = useState(false);
 
   let cookieData=Cookies.get("jwtTokenData")
@@ -70,44 +71,49 @@ export const Home=()=>{
     getAllCities()
   },[])
 
-  const onCityClick=async(cityId)=>{
-    const specifiedCityAreasApiUrl="https://argonbackend-production.up.railway.app/api/v1/city/chosen-city-area"
-    
-    const options={
-      method:"POST",
-      headers:{
-        "content-type":"application/json",
-        "authorization":`Bearer ${jwtToken}`
-      },
-      body:JSON.stringify({specificCityId:cityId})
-    }
 
-    const request=await fetch(specifiedCityAreasApiUrl,options)
-    const response=await request.json()
-    if(request.ok){
-      setApiSituation(allApiSituations.success)
-      setAllSpecfiedCityAreas({response})
-    }else{
-      setApiSituation(allApiSituations.failure)
-      console.log("Error ==>",{response})
-    }
-}
+     async function onCityClick (cityId){
+      setAreaApiSituations(allApiSituations.inProgress)
+      const specifiedCityAreasApiUrl="https://argonbackend-production.up.railway.app/api/v1/city/chosen-city-area"
+      
+      const options={
+        method:"POST",
+        headers:{
+          "content-type":"application/json",
+          "authorization":`Bearer ${jwtToken}`
+        },
+        body:JSON.stringify({specificCityId:cityId})
+      }
+  
+      const request=await fetch(specifiedCityAreasApiUrl,options)
+      const response=await request.json()
+      if(request.ok){
+        setAreaApiSituations(allApiSituations.success)
+        const fetchedData=response.data
+        const formatedData=fetchedData.map(eachAreaObj=>({
+          areaName:eachAreaObj.area_name,
+          areaId:eachAreaObj.area_id,
+          cityId:eachAreaObj.city_id,
+          technicianId:eachAreaObj.technician_id,
+          id:eachAreaObj.id
+        }))
+        setAllSpecfiedCityAreas(formatedData)
+      }else{
+        setAreaApiSituation(allApiSituations.failure)
+        console.log("Error ==>",response.data)
+      }
+  }
+ 
     if(allApiSituations.inProgress===apiSituation){
       return <LoadingAnime className="w-full"/>
     }
 
-    console.log({allCities,allSpecfiedCityAreas,isLoggedOut,apiSituation})
+    console.log({allCities,allSpecfiedCityAreas,isLoggedOut,apiSituation,areaApiSituation})
   
     return (
       <>
         <Header isLoggedOut={isLoggedOut} handleLogout={handleLogout}/>
-          <Hero allCities={allCities} onCityClick={onCityClick} isLoggedOut={isLoggedOut}/>              
+          <Hero areaApiSituation={areaApiSituation} allSpecfiedCityAreas={allSpecfiedCityAreas} allApiSituations={allApiSituations} allCities={allCities} onCityClick={onCityClick} isLoggedOut={isLoggedOut}/>              
       </>
     )
 }
-
-
-
-
-
-

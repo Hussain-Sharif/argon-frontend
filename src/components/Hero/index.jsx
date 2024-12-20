@@ -26,24 +26,29 @@ import { ReUseText } from "../ReusableStyledComponents"
 import { useEffect, useState } from "react"
 import { ChevronDown, X } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import { BounceLoadAnime } from "@/app/Loader/bounceLoadAnime"
 
 export const Hero = (props) => {
-  const { allCities,onCityClick } = props
+  const { allCities,onCityClick,areaApiSituation,allSpecfiedCityAreas,allApiSituations } = props
   const navigate=useNavigate()
 
   const [position, setPosition] = useState(null)
   // const [isDropdownOpen, setDropdownOpen] = useState(false)
-  const handleSelectButton = () => {
-    setPosition(position)
-    // console.log("button is clicked",position)
-  }
-
-  useEffect(() => {
-    if(allCities.length>0){
-      // console.log("button is effected in useEffect",position)
-      onCityClick(position)
+  const handleSelectButton = (selectedPosition) => {
+    setPosition(selectedPosition);
+    if (allCities.length > 0 && selectedPosition) {
+      // console.log("User selected a city, making API call", selectedPosition ,position);
+      onCityClick(selectedPosition);
     }
-  },[position])
+  };
+  
+
+  // useEffect(() => {
+  //   if(allCities.length>0){
+  //     console.log("button is effected in useEffect",position)
+  //     onCityClick(position)
+  //   }
+  // },[position])
 
   // const handleDropdownChange = (isOpen) => {
   //   setDropdownOpen(isOpen)
@@ -53,6 +58,45 @@ export const Hero = (props) => {
   // }
   
   // console.log({position})
+
+
+  const handleFormatingOfAreaName=(cityAreasList)=>{
+    const formatedAreaValue=cityAreasList.map((eachAreaObj) => eachAreaObj.areaName)
+    // console.log(formatedAreaValue)
+    const convertedAreaValue=formatedAreaValue.length > 1 
+    ? ("Only in "+ formatedAreaValue.slice(0, -1).join(", ") + " & " + formatedAreaValue[formatedAreaValue.length - 1])
+    : (formatedAreaValue.length === 1?("Only in " + formatedAreaValue[0]) : "Sorry No Technicians avaiable for this city")
+    return convertedAreaValue
+  }
+
+  const switchAreaSpecifiedSituation=(areaApiSituation)=>{
+    // console.log(areaApiSituation,allApiSituations.initial)
+      switch (areaApiSituation) {
+        case allApiSituations.initial:
+          return (<>
+            {console.log("initial")}
+              <p>Areas Covered for chosen City</p>
+              </>)
+        case allApiSituations.inProgress:
+            return(
+                <BounceLoadAnime/>  
+                )
+        case allApiSituations.success:
+            return(
+                `
+                  ${handleFormatingOfAreaName(allSpecfiedCityAreas)}
+                `
+            )
+        case allApiSituations.failure:
+            return(
+                `
+                something went wrong please try again
+                `
+            )
+        default:
+          break;
+      }
+  }
 
   return (
     <div className="w-full min-h-screen border-none p-4 md:p-10 flex flex-col md:flex-row justify-between items-start">
@@ -79,10 +123,10 @@ export const Hero = (props) => {
                 allCities.length>0? <DropdownMenuContent className="w-56 ml-4">
                 <DropdownMenuLabel>Currently 10 Cities in INDIA</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
+                <DropdownMenuRadioGroup value={position}  onValueChange={(selectedPosition) => handleSelectButton(selectedPosition)}>
                   {allCities.map((city) => {
                     return (
-                      <DropdownMenuRadioItem onClick={handleSelectButton} key={city.id} value={city.id}>
+                      <DropdownMenuRadioItem onClick={() => handleSelectButton(city.id)} key={city.id} value={city.id}>
                         {city.cityName}
                       </DropdownMenuRadioItem>
                     )
@@ -111,7 +155,7 @@ export const Hero = (props) => {
               }
               </AlertDialog>
             </DropdownMenu>
-            <Badge className="w-46 bg-[#5E72E4]">Areas Covered for chosen City</Badge>
+            <Badge className="w-46 bg-[#5E72E4]">{switchAreaSpecifiedSituation(areaApiSituation)}</Badge>
           </div>
         </div>
       </div>
