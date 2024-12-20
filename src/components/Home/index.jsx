@@ -37,6 +37,7 @@ export const Home=()=>{
         console.log("After removing cookie:", Cookies.get("jwtTokenData")); // Check removal
         setIsLoggedOut(true); // Trigger to re-render this component
         setAllCities([])
+        setAreaApiSituations(allApiSituations.initial)
     };
 
   useEffect(()=>{
