@@ -24,7 +24,7 @@ import { Badge } from "@/components/ui/badge"
 
 import { ReUseText } from "../ReusableStyledComponents"
 import { useEffect, useState } from "react"
-import { ChevronDown, X } from "lucide-react"
+import { ChevronDown, PackageIcon, PackageSearch, X } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { BounceLoadAnime } from "@/app/Loader/bounceLoadAnime"
 
@@ -150,12 +150,17 @@ export const Hero = (props) => {
                       <Button onClick={()=>{navigate("/register")}} type="button" className="mb-4">Sign-Up/Register</Button>
                     </AlertDialogFooter>
                   </AlertDialogContent>
-                
-
               }
               </AlertDialog>
             </DropdownMenu>
             <Badge className="w-46 bg-[#5E72E4]">{switchAreaSpecifiedSituation(areaApiSituation)}</Badge>
+          </div>
+          <div className="flex flex-row justify-start items-center mt-4">
+              <div className="border-[#CAD1D7] flex flex-row items-center w-80 border-2 h-11 rounded-md">
+                <PackageSearch color="#ADB5BD" className="ml-1" size="28"/>
+                <input className="w-full h-4/6 outline-none px-3" placeholder="Search Home Appliances" type="text"/>
+              </div>
+              <Button className="ml-4" type="button">Search</Button>
           </div>
         </div>
       </div>
