@@ -1,7 +1,20 @@
-import { Header } from "../Header"
 import { useEffect, useState } from "react"
 import Cookies from "js-cookie"
 import { useNavigate } from 'react-router-dom'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
+import { Header } from "../Header"
+
 import { Hero } from '../Hero'
 import { LoadingAnime } from '@/app/Loader/loadingAnime'
 
@@ -17,6 +30,7 @@ const allApiSituations={
 export const Home=()=>{
       const navigate=useNavigate()
 
+  const [selectedCityId,setSelectedCityId]=useState(null)
   const [allCities,setAllCities]=useState([])
   const [allSpecfiedCityAreas,setAllSpecfiedCityAreas]=useState([])
   const [allSuggestions,setAllSuggestions]=useState([])
@@ -24,7 +38,10 @@ export const Home=()=>{
   const [apiSituation,setApiSituation]=useState(allApiSituations.initial)
   const [areaApiSituation,setAreaApiSituations]=useState(allApiSituations.initial)
   const [suggestionApiSituation,setSuggestionApiSituation]=useState(allApiSituations.initial)
+  const [searchResultApiSituation,setSearchResultApiSituation]=useState(allApiSituations.initial)
+  const [searchResult,setSearchResult]=useState([])
   const [isLoggedOut, setIsLoggedOut] = useState(false);
+  // const [noIssueSearch,setNoIssueSearch]=useState(false)
 
   let cookieData=Cookies.get("jwtTokenData")
   let jwtToken;
@@ -111,6 +128,7 @@ export const Home=()=>{
           id:eachAreaObj.id
         }))
         setAllSpecfiedCityAreas(formatedData)
+        setSelectedCityId(cityId)
       }else{
         setAreaApiSituation(allApiSituations.failure)
         console.log("Error ==>",response.data)
@@ -152,19 +170,44 @@ export const Home=()=>{
 
 
   const onSearchClickTechnicians=async(exactMatch)=>{
-   
-    console.log("Search Button is Clicked",exactMatch)
+    console.log("Search Button is Clicked search exactmatch & selectedCityId!==null",exactMatch,selectedCityId!==null)
+    if(exactMatch && selectedCityId!==null){
+      setSearchResultApiSituation(allApiSituations.inProgress)
+      const requestData={
+        specificCityId:selectedCityId,
+        applianceId:allSuggestions.filter(eachSuggestionObj=>eachSuggestionObj.applianceName===applianceSearchValue)[0].applianceId
+      }
+      console.log("After exactMatch is made for API data",{requestData})
+      const searchTechniciansApiUrl="https://argonbackend-production.up.railway.app/api/v1/technician/featured-technicians"
+      const options={
+        method:"POST",
+        headers:{
+          "content-type":"application/json",
+          "authorization":`Bearer ${jwtToken}`
+        },
+        body:JSON.stringify(requestData)
+      }
+      const response=await fetch(searchTechniciansApiUrl,options)
+      const responseData=await response.json()
+      if(response.ok){
+        const fetchedData=responseData.data
+        setSearchResult(fetchedData)
+        setSearchResultApiSituation(allApiSituations.success)
+      }
+    }else{
+      setSearchResultApiSituation(allApiSituations.failure)
+    }
   }
 
     if(allApiSituations.inProgress===apiSituation){
       return <LoadingAnime className="w-full"/>
     }
 
-    console.log({allCities,allSpecfiedCityAreas,isLoggedOut,apiSituation,areaApiSituation,applianceSearchValue,allSuggestions})
+    console.log({selectedCityId,searchResult,allCities,allSpecfiedCityAreas,isLoggedOut,apiSituation,areaApiSituation,applianceSearchValue,allSuggestions})
     return (
       <>
         <Header isLoggedOut={isLoggedOut} handleLogout={handleLogout}/>
-          <Hero  onSearchClickTechnicians={onSearchClickTechnicians} setApplianceSearchValue={setApplianceSearchValue} applianceSearchValue={applianceSearchValue} jwtToken={jwtToken} applianceSearchInputEvent={applianceSearchInputEvent} suggestionApiSituation={suggestionApiSituation}  allSuggestions={allSuggestions}  areaApiSituation={areaApiSituation} allSpecfiedCityAreas={allSpecfiedCityAreas} allApiSituations={allApiSituations} allCities={allCities} onCityClick={onCityClick} isLoggedOut={isLoggedOut}/>              
+          <Hero selectedCityId={selectedCityId} onSearchClickTechnicians={onSearchClickTechnicians} setApplianceSearchValue={setApplianceSearchValue} applianceSearchValue={applianceSearchValue} jwtToken={jwtToken} applianceSearchInputEvent={applianceSearchInputEvent} suggestionApiSituation={suggestionApiSituation}  allSuggestions={allSuggestions}  areaApiSituation={areaApiSituation} allSpecfiedCityAreas={allSpecfiedCityAreas} allApiSituations={allApiSituations} allCities={allCities} onCityClick={onCityClick} isLoggedOut={isLoggedOut}/>              
       </>
     )
 }

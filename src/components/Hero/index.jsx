@@ -44,7 +44,7 @@ import { BounceLoadAnime } from "@/app/Loader/bounceLoadAnime"
 import { LoadingAnime } from "@/app/Loader/loadingAnime"
 
 export const Hero = (props) => {
-  const {jwtToken, onSearchClickTechnicians, allCities,onCityClick,areaApiSituation,allSpecfiedCityAreas,allApiSituations,applianceSearchValue,applianceSearchInputEvent,suggestionApiSituation,allSuggestions,setApplianceSearchValue } = props
+  const {selectedCityId,jwtToken, onSearchClickTechnicians, allCities,onCityClick,areaApiSituation,allSpecfiedCityAreas,allApiSituations,applianceSearchValue,applianceSearchInputEvent,suggestionApiSituation,allSuggestions,setApplianceSearchValue } = props
   const navigate=useNavigate()
 
   const [position, setPosition] = useState(null)
@@ -185,7 +185,7 @@ export const Hero = (props) => {
             </DropdownMenu>
             <Badge className="w-46 bg-[#5E72E4]">{switchAreaSpecifiedSituation(areaApiSituation)}</Badge>
           </div>
-          {<h1 className="text-xs text-[#525F7F] font-bold mb-0 mt-4">
+          {<h1 className="text-xs text-[#525F7F] font-bold mb-1 mt-4">
            Please enter among them
         </h1>}
           <div className="flex flex-row justify-start items-start  relative">                
@@ -231,15 +231,15 @@ export const Hero = (props) => {
                   </CommandList>
                 </Command>
               
-              <AlertDialog  open={showInvalidSearchAlert} onOpenChange={handleSearchClick}>
+              <AlertDialog  open={showInvalidSearchAlert &&  selectedCityId===null} onOpenChange={handleSearchClick}>
                 <AlertDialogTrigger asChild>
                   <Button className="ml-4" type="button" onClick={handleSearchClick}>Search</Button>
                 </AlertDialogTrigger>
                 {<AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Please Select/Enter among provided appliances</AlertDialogTitle>
+                    <AlertDialogTitle>{selectedCityId===null?"Please Choose a city":"Please Select/Enter among provided appliances"}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      We are limited with the search feature, Kindly understand.
+                    {selectedCityId===null?"It helps to identify available area's":"We are limited with the search feature, Kindly understand."}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
