@@ -45,7 +45,7 @@ export const Home=()=>{
 
   let cookieData=Cookies.get("jwtTokenData")
   let jwtToken;
-  console.log(cookieData && !isLoggedOut,cookieData,!isLoggedOut)
+  // console.log(cookieData && !isLoggedOut,cookieData,!isLoggedOut)
   if(cookieData && !isLoggedOut){
     cookieData=JSON.parse(cookieData)
     jwtToken=cookieData.jwtToken
@@ -54,15 +54,15 @@ export const Home=()=>{
   
 
   const applianceSearchInputEvent=(e)=>{
-    console.log("values,",e)
+    // console.log("values,",e)
     setApplianceSearchValue(e)
   }
 
     const handleLogout = () => {
-        console.log("Button Is clicked as LogOut")
-        console.log("Before removing cookie:", Cookies.get("jwtTokenData")); // Debugging
+        // console.log("Button Is clicked as LogOut")
+        // console.log("Before removing cookie:", Cookies.get("jwtTokenData")); // Debugging
         Cookies.remove("jwtTokenData",{path: '/',domain:window.location.hostname}); // Include path
-        console.log("After removing cookie:", Cookies.get("jwtTokenData")); // Check removal
+        // console.log("After removing cookie:", Cookies.get("jwtTokenData")); // Check removal
         setIsLoggedOut(true); // Trigger to re-render this component
         setAllCities([])
         setAreaApiSituations(allApiSituations.initial)
@@ -71,7 +71,7 @@ export const Home=()=>{
   useEffect(()=>{
     const getAllCities=async()=>{
         setApiSituation(allApiSituations.inProgress)
-        console.log("In home:",{jwtToken})
+        // console.log("In home:",{jwtToken})
         const urlAllCities="https://argonbackend-production.up.railway.app/api/v1/city/all-cities"
         const options={
           method:"GET",
@@ -102,7 +102,7 @@ export const Home=()=>{
 
 
      async function onCityClick (cityId){
-      console.log("onClick is executing......<======")
+      // console.log("onClick is executing......<======")
       setAreaApiSituations(allApiSituations.inProgress)
       const specifiedCityAreasApiUrl="https://argonbackend-production.up.railway.app/api/v1/city/chosen-city-area"
       
@@ -131,7 +131,7 @@ export const Home=()=>{
         setSelectedCityId(cityId)
       }else{
         setAreaApiSituation(allApiSituations.failure)
-        console.log("Error ==>",response.data)
+        // console.log("Error ==>",response.data)
       }
   }
  
@@ -151,7 +151,7 @@ export const Home=()=>{
 
       const response=await fetch(suggestionApiUrl,options)
       const responseData=await response.json()
-      console.log("suggestion api responseData:",{responseData})
+      // console.log("suggestion api responseData:",{responseData})
       if(response.ok){
         const fetchedData=responseData.data
         const formatedData=fetchedData.map(eachSuggestionObj=>({

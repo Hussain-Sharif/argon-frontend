@@ -114,9 +114,9 @@ export const Hero = (props) => {
 
   // Handle search button click
   const handleSearchClick = () => {
-    const hasExactMatch = getExactMatch();
-    // console.log("in handleSearchClick:", hasExactMatch);
-    setShowInvalidSearchAlert(!hasExactMatch);
+    const hasExactMatch = getExactMatch()?selectedCityId===null:true ;
+    // console.log("in handleSearchClick:", hasExactMatch,getExactMatch(), selectedCityId===null);
+    setShowInvalidSearchAlert(hasExactMatch);
     onSearchClickTechnicians(hasExactMatch);
   };
 
@@ -231,8 +231,8 @@ export const Hero = (props) => {
                   </CommandList>
                 </Command>
               
-              <AlertDialog  open={showInvalidSearchAlert &&  selectedCityId===null} onOpenChange={handleSearchClick}>
-                <AlertDialogTrigger asChild>
+              <AlertDialog  open={showInvalidSearchAlert} onOpenChange={handleSearchClick}>
+                <AlertDialogTrigger inert asChild>
                   <Button className="ml-4" type="button" onClick={handleSearchClick}>Search</Button>
                 </AlertDialogTrigger>
                 {<AlertDialogContent>
@@ -242,7 +242,7 @@ export const Hero = (props) => {
                     {selectedCityId===null?"It helps to identify available area's":"We are limited with the search feature, Kindly understand."}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
-                  <AlertDialogFooter>
+                  <AlertDialogFooter >
                     <Button type="button" onClick={()=>{
                       setShowInvalidSearchAlert(false) }} className="mb-4" variant="outline">Cancel</Button>
                     <Button type="button" onClick={()=>{setShowInvalidSearchAlert(false) }} className="mb-4">Sure</Button>
