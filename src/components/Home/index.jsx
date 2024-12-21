@@ -19,8 +19,11 @@ export const Home=()=>{
 
   const [allCities,setAllCities]=useState([])
   const [allSpecfiedCityAreas,setAllSpecfiedCityAreas]=useState([])
+  const [allSuggestions,setAllSuggestions]=useState([])
+  const [applianceSearchValue,setApplianceSearchValue]=useState("")
   const [apiSituation,setApiSituation]=useState(allApiSituations.initial)
   const [areaApiSituation,setAreaApiSituations]=useState(allApiSituations.initial)
+  const [suggestionApiSituation,setSuggestionApiSituation]=useState(allApiSituations.initial)
   const [isLoggedOut, setIsLoggedOut] = useState(false);
 
   let cookieData=Cookies.get("jwtTokenData")
@@ -30,6 +33,14 @@ export const Home=()=>{
     cookieData=JSON.parse(cookieData)
     jwtToken=cookieData.jwtToken
   }
+
+  
+
+  const applianceSearchInputEvent=(e)=>{
+    console.log("values,",e)
+    setApplianceSearchValue(e)
+  }
+
     const handleLogout = () => {
         console.log("Button Is clicked as LogOut")
         console.log("Before removing cookie:", Cookies.get("jwtTokenData")); // Debugging
@@ -74,6 +85,7 @@ export const Home=()=>{
 
 
      async function onCityClick (cityId){
+      console.log("onClick is executing......<======")
       setAreaApiSituations(allApiSituations.inProgress)
       const specifiedCityAreasApiUrl="https://argonbackend-production.up.railway.app/api/v1/city/chosen-city-area"
       
@@ -105,16 +117,54 @@ export const Home=()=>{
       }
   }
  
+  useEffect(()=>{
+    
+    const getSuggestions=async()=>{
+      setSuggestionApiSituation(allApiSituations.inProgress)
+      const suggestionApiUrl="https://argonbackend-production.up.railway.app/api/v1/appliance/appliance-suggestions"
+      const options={
+        method:"POST",
+        headers:{
+          "content-type":"application/json",
+          "authorization":`Bearer ${jwtToken}`
+        },
+        body:JSON.stringify({searchedAppliance:applianceSearchValue})
+      }
+
+      const response=await fetch(suggestionApiUrl,options)
+      const responseData=await response.json()
+      console.log("suggestion api responseData:",{responseData})
+      if(response.ok){
+        const fetchedData=responseData.data
+        const formatedData=fetchedData.map(eachSuggestionObj=>({
+          applianceName:eachSuggestionObj.name,
+          applianceId:eachSuggestionObj.appliance_id
+        }))
+        setAllSuggestions(formatedData)
+        setSuggestionApiSituation(allApiSituations.success)
+      }else{
+        setSuggestionApiSituation(allApiSituations.failure)
+      }
+    }
+    getSuggestions()
+    
+  },[applianceSearchValue])
+
+
+  const onSearchClickTechnicians=async(exactMatch)=>{
+   
+    console.log("Search Button is Clicked",exactMatch)
+  }
+
     if(allApiSituations.inProgress===apiSituation){
       return <LoadingAnime className="w-full"/>
     }
 
-    console.log({allCities,allSpecfiedCityAreas,isLoggedOut,apiSituation,areaApiSituation})
-  
+    console.log({allCities,allSpecfiedCityAreas,isLoggedOut,apiSituation,areaApiSituation,applianceSearchValue,allSuggestions})
     return (
       <>
         <Header isLoggedOut={isLoggedOut} handleLogout={handleLogout}/>
-          <Hero areaApiSituation={areaApiSituation} allSpecfiedCityAreas={allSpecfiedCityAreas} allApiSituations={allApiSituations} allCities={allCities} onCityClick={onCityClick} isLoggedOut={isLoggedOut}/>              
+          <Hero  onSearchClickTechnicians={onSearchClickTechnicians} setApplianceSearchValue={setApplianceSearchValue} applianceSearchValue={applianceSearchValue} jwtToken={jwtToken} applianceSearchInputEvent={applianceSearchInputEvent} suggestionApiSituation={suggestionApiSituation}  allSuggestions={allSuggestions}  areaApiSituation={areaApiSituation} allSpecfiedCityAreas={allSpecfiedCityAreas} allApiSituations={allApiSituations} allCities={allCities} onCityClick={onCityClick} isLoggedOut={isLoggedOut}/>              
       </>
     )
 }

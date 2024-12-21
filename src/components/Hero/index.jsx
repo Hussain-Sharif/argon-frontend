@@ -1,3 +1,15 @@
+
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/components/ui/command"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -19,21 +31,25 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-
 import { Badge } from "@/components/ui/badge"
+
+
+
 
 import { ReUseText } from "../ReusableStyledComponents"
 import { useEffect, useState } from "react"
-import { ChevronDown, PackageIcon, PackageSearch, X } from "lucide-react"
+import { ChevronDown,  X } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { BounceLoadAnime } from "@/app/Loader/bounceLoadAnime"
+import { LoadingAnime } from "@/app/Loader/loadingAnime"
 
 export const Hero = (props) => {
-  const { allCities,onCityClick,areaApiSituation,allSpecfiedCityAreas,allApiSituations } = props
+  const {jwtToken, onSearchClickTechnicians, allCities,onCityClick,areaApiSituation,allSpecfiedCityAreas,allApiSituations,applianceSearchValue,applianceSearchInputEvent,suggestionApiSituation,allSuggestions,setApplianceSearchValue } = props
   const navigate=useNavigate()
 
   const [position, setPosition] = useState(null)
-  // const [isDropdownOpen, setDropdownOpen] = useState(false)
+  const [isInputFocused, setIsInputFocused] = useState(false)
+  const [showInvalidSearchAlert, setShowInvalidSearchAlert] = useState(false);
   const handleSelectButton = (selectedPosition) => {
     setPosition(selectedPosition);
     if (allCities.length > 0 && selectedPosition) {
@@ -42,22 +58,6 @@ export const Hero = (props) => {
     }
   };
   
-
-  // useEffect(() => {
-  //   if(allCities.length>0){
-  //     console.log("button is effected in useEffect",position)
-  //     onCityClick(position)
-  //   }
-  // },[position])
-
-  // const handleDropdownChange = (isOpen) => {
-  //   setDropdownOpen(isOpen)
-  //   if (isOpen) {
-  //     handleSelectButton() // Log when the dropdown is opened
-  //   }
-  // }
-  
-  // console.log({position})
 
 
   const handleFormatingOfAreaName=(cityAreasList)=>{
@@ -74,7 +74,6 @@ export const Hero = (props) => {
       switch (areaApiSituation) {
         case allApiSituations.initial:
           return (<>
-            {console.log("initial")}
               <p>Areas Covered for chosen City</p>
               </>)
         case allApiSituations.inProgress:
@@ -90,13 +89,44 @@ export const Hero = (props) => {
         case allApiSituations.failure:
             return(
                 `
-                something went wrong please try again
+                something went wrong please Refresh the Page
                 `
             )
         default:
           break;
       }
   }
+
+  const getExactMatch = () => {
+    // console.log("applianceSearchValue:", applianceSearchValue);
+    // console.log("allSuggestions:", allSuggestions);
+    if (!allSuggestions || !applianceSearchValue) return false;
+    const hasMatch = allSuggestions.some(
+      suggestion => suggestion.applianceName.toLowerCase() === applianceSearchValue.toLowerCase()
+    );
+    // console.log("hasMatch:", hasMatch);
+    return hasMatch;
+  };
+
+  useEffect(() => {
+    setShowInvalidSearchAlert(false);
+  }, [applianceSearchValue]); // when value changes the alert should be hidden
+
+  // Handle search button click
+  const handleSearchClick = () => {
+    const hasExactMatch = getExactMatch();
+    // console.log("in handleSearchClick:", hasExactMatch);
+    setShowInvalidSearchAlert(!hasExactMatch);
+    onSearchClickTechnicians(hasExactMatch);
+  };
+
+  const shouldShowList = () => {
+    if (suggestionApiSituation === allApiSituations.inProgress) return true;
+    if (suggestionApiSituation !== allApiSituations.success) return false;
+    if (!isInputFocused) return false;
+    
+    return !getExactMatch();
+  };
 
   return (
     <div className="w-full min-h-screen border-none p-4 md:p-10 flex flex-col md:flex-row justify-between items-start">
@@ -155,14 +185,73 @@ export const Hero = (props) => {
             </DropdownMenu>
             <Badge className="w-46 bg-[#5E72E4]">{switchAreaSpecifiedSituation(areaApiSituation)}</Badge>
           </div>
-          <div className="flex flex-row justify-start items-center mt-4">
-              <div className="border-[#CAD1D7] flex flex-row items-center w-80 border-2 h-11 rounded-md">
-                <PackageSearch color="#ADB5BD" className="ml-1" size="28"/>
-                <input className="w-full h-4/6 outline-none px-3" placeholder="Search Home Appliances" type="text"/>
-              </div>
-              <Button className="ml-4" type="button">Search</Button>
+          {<h1 className="text-xs text-[#525F7F] font-bold mb-0 mt-4">
+           Please enter among them
+        </h1>}
+          <div className="flex flex-row justify-start items-start  relative">                
+                <Command className="border-[#CAD1D7] border-2  rounded-md ">
+              
+                  <CommandInput  value={applianceSearchValue}
+              onValueChange={(value) => {
+                setApplianceSearchValue(value);
+              }}
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => {
+                setTimeout(() => setIsInputFocused(false))
+              }}
+              placeholder="Search Home Appliances" 
+              className="h-10" />
+                  <CommandList className={`${shouldShowList() ?"h-auto max-h-[300px] overflow-y-auto" : "h-0"}`}>
+                  {suggestionApiSituation===allApiSituations.success && <CommandEmpty>No appliances found.</CommandEmpty>}
+                  <CommandGroup>
+                  {suggestionApiSituation===allApiSituations.success ? (
+                    allSuggestions.map((suggestion, index) => (
+                      <CommandItem 
+                        key={index}
+                        value={suggestion.applianceName}
+                        onSelect={(suggestionValue) => {
+                          // console.log("==> suggestion value:",suggestionValue)
+                          setApplianceSearchValue(suggestionValue);
+                          setIsInputFocused(false);
+                        }}
+                      >
+                        {suggestion.applianceName}
+                      </CommandItem>
+                    ))
+                  ) :null 
+                  }
+                </CommandGroup>
+                {(suggestionApiSituation === allApiSituations.inProgress &&  jwtToken!==undefined) && (
+                <CommandGroup>
+                  <CommandItem>
+                    <BounceLoadAnime color="black" text="searching for appliances"/>
+                  </CommandItem>
+                </CommandGroup>
+              )}
+                  </CommandList>
+                </Command>
+              
+              <AlertDialog  open={showInvalidSearchAlert} onOpenChange={handleSearchClick}>
+                <AlertDialogTrigger asChild>
+                  <Button className="ml-4" type="button" onClick={handleSearchClick}>Search</Button>
+                </AlertDialogTrigger>
+                {<AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Please Select/Enter among provided appliances</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      We are limited with the search feature, Kindly understand.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <Button type="button" onClick={()=>{
+                      setShowInvalidSearchAlert(false) }} className="mb-4" variant="outline">Cancel</Button>
+                    <Button type="button" onClick={()=>{setShowInvalidSearchAlert(false) }} className="mb-4">Sure</Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>}
+              </AlertDialog>
           </div>
         </div>
+        
       </div>
       <img className="max-w-90 md:max-w-sm" alt="hero_img" src="public/assests/hero_image.png" />
     </div>
