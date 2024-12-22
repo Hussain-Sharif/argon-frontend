@@ -1,23 +1,13 @@
 import { useEffect, useState } from "react"
 import Cookies from "js-cookie"
-import { useNavigate } from 'react-router-dom'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+import { AirVent, Flame, LucideMicrowave, Refrigerator, Tv, WashingMachine } from "lucide-react";
 
 import { Header } from "../Header"
 
 import { Hero } from '../Hero'
 import { LoadingAnime } from '@/app/Loader/loadingAnime'
-
+import { AllAppliance } from "../AllAppliance";
+// import { allAppliancesList } from "../../lib/utils"
 
 
 const allApiSituations={
@@ -27,8 +17,53 @@ const allApiSituations={
   failure:"FAILURE"
 }
 
+export const allAppliancesList = [
+  {
+    id: 1,
+    image: () => <Refrigerator size={40} color="#EA3C12" opacity={0.7} />, // Function returning JSX
+    name: "Fridge",
+    description:
+      "Silent guardian of preservation, holding memories in suspended animation. Cooling the passions of the moment, protecting what matters from the heat of impulsiveness.",
+  },
+  {
+    id: 2,
+    image: () => <AirVent size={40} color="#EA3C12" opacity={0.7} />, // Function returning JSX
+    name: "Air Conditioner",
+    description:
+      "Architect of comfort, creating invisible boundaries between chaos and serenity. Filtering out life's harsh temperatures, crafting a sanctuary of controlled emotion.",
+  },
+  {
+    id: 3,
+    image: () => <Flame size={40} color="#EA3C12" opacity={0.7} />, // Function returning JSX
+    name: "Gas Stove",
+    description:
+      "Elemental transformer, turning raw potential into nourishment. A crucible of creation where fire meets intention, cooking not just food, but possibilities.",
+  },
+  {
+    id: 4,
+    image: () => <Tv size={40} color="#EA3C12" opacity={0.7}/>, // Function returning JSX
+    name: "Television",
+    description:
+      "Window to infinite worlds, a portal transcending physical boundaries. Reflecting dreams, broadcasting stories that bridge isolation.",
+  },
+  {
+    id: 5,
+    image: () => <WashingMachine size={40} color="#EA3C12" opacity={0.7} />, // Function returning JSX
+    name: "Washing Machine",
+    description:
+      "Life spins in cycles, just like the drum that cleanses our burdens. Each rotation washes away the stains of yesterday, leaving us renewed.",
+  },
+  {
+    id: 6,
+    image: () => <LucideMicrowave size={40} color="#EA3C12" opacity={0.7}/>, // Function returning JSX
+    name: "Microwave",
+    description:
+      "Instant transformation, heating cold memories into warm possibilities. Time compressed, potential unleashed in mere moments.",
+  },
+];
+
+
 export const Home=()=>{
-      const navigate=useNavigate()
 
   const [selectedCityId,setSelectedCityId]=useState(null)
   const [allCities,setAllCities]=useState([])
@@ -208,6 +243,7 @@ export const Home=()=>{
       <>
         <Header isLoggedOut={isLoggedOut} handleLogout={handleLogout}/>
           <Hero selectedCityId={selectedCityId} onSearchClickTechnicians={onSearchClickTechnicians} setApplianceSearchValue={setApplianceSearchValue} applianceSearchValue={applianceSearchValue} jwtToken={jwtToken} applianceSearchInputEvent={applianceSearchInputEvent} suggestionApiSituation={suggestionApiSituation}  allSuggestions={allSuggestions}  areaApiSituation={areaApiSituation} allSpecfiedCityAreas={allSpecfiedCityAreas} allApiSituations={allApiSituations} allCities={allCities} onCityClick={onCityClick} isLoggedOut={isLoggedOut}/>              
+          <AllAppliance allAppliancesList={allAppliancesList}/>
       </>
     )
 }

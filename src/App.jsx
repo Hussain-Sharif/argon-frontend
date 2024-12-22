@@ -1,4 +1,5 @@
 import { Suspense,lazy } from 'react'
+import 'animate.css';
 import { Route, BrowserRouter, Routes, } from 'react-router-dom'
 import './App.css'
 import { Login } from './components/Login'

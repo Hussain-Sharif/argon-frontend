@@ -129,8 +129,8 @@ export const Hero = (props) => {
   };
 
   return (
-    <div className="w-full min-h-screen border-none p-4 md:p-10 flex flex-col md:flex-row justify-between items-start">
-      <div className="mt-8 border-none mb-2">
+    <div className="w-full min-h-screen md:min-h-[85vh]  bg-[#BDE4F4] p-4 md:p-10 flex flex-col md:flex-row justify-between items-start">
+      <div className="mt-8 border-none mb-2 ">
         <h1 className="text-4xl font-bold mb-2">
           Take care of your home needs now! <br />
         </h1>
@@ -188,7 +188,7 @@ export const Hero = (props) => {
           {<h1 className="text-xs text-[#525F7F] font-bold mb-1 mt-4">
            Please enter among them
         </h1>}
-          <div className="flex flex-row justify-start items-start  relative">                
+          <div className="flex flex-row justify-start items-start  ">                
                 <Command className="border-[#CAD1D7] border-2  rounded-md ">
               
                   <CommandInput  value={applianceSearchValue}
@@ -253,7 +253,7 @@ export const Hero = (props) => {
         </div>
         
       </div>
-      <img className="max-w-90 md:max-w-sm" alt="hero_img" src="public/assests/hero_image.png" />
+      <img className="max-w-90 mt-10 mb-40 md:mb-0 md:mt-0 md:max-w-sm" alt="hero_img" src="public/assests/hero_image.png" />
     </div>
   )
 }

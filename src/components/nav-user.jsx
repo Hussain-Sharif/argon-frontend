@@ -40,13 +40,13 @@ export function NavUser({
 
   // console.log({user})
   return (
-    (<SidebarMenu>
-      <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+    (<SidebarMenu >
+      <SidebarMenuItem  >
+        <DropdownMenu >
+          <DropdownMenuTrigger  asChild>
             <SidebarMenuButton
               size="lg"
-              className="border-black border data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+              className="border-[#3A416F] border outline-none data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
               <Avatar className="h-8 w-8 rounded-lg ">
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg bg-white">{(user.name[0]+user.name[1]).toUpperCase()}</AvatarFallback>
@@ -55,7 +55,7 @@ export function NavUser({
                 <span className="truncate font-semibold sm:inline hidden">{user.name}</span>
                 <span className="truncate text-xs sm:inline hidden">{user.email}</span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4 " />
+              <ChevronsUpDown className="ml-auto size-4" color="#3A416F" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
