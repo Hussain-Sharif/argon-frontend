@@ -46,7 +46,7 @@ export function NavUser({
           <DropdownMenuTrigger  asChild>
             <SidebarMenuButton
               size="lg"
-              className="border-[#3A416F] border outline-none data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+              className="border-[#3A416F] border-2 outline-none data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
               <Avatar className="h-8 w-8 rounded-lg ">
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg bg-white">{(user.name[0]+user.name[1]).toUpperCase()}</AvatarFallback>
@@ -59,7 +59,7 @@ export function NavUser({
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg  z-[90] relative"
             side={isMobile ? "bottom" : "right"}
             align="end"
             sideOffset={4}>

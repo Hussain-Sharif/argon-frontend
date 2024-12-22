@@ -34,7 +34,7 @@ export const Header=(props)=>{
                 {jwtToken?
                 <ReUseDiv>
                     <SidebarProvider className="">
-                        <NavUser user={userData} handleLogout={handleLogout}/> 
+                        <NavUser  user={userData} handleLogout={handleLogout}/> 
                     </SidebarProvider>
                     
                 </ReUseDiv> : 
