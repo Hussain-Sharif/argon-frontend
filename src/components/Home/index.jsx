@@ -9,6 +9,7 @@ import { LoadingAnime } from '@/app/Loader/loadingAnime'
 import { AllAppliance } from "../AllAppliance";
 import { StepsToUseApp } from "../StepsToUseApp";
 import { Reviews } from "../Reviews";
+import { Footer } from "../Footer";
 // import { allAppliancesList } from "../../lib/utils"
 
 
@@ -250,6 +251,7 @@ export const Home=()=>{
           <AllAppliance allAppliancesList={allAppliancesList}/>
           <StepsToUseApp/>
           <Reviews/>
+          <Footer/>
       </>
     )
 }
