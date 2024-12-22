@@ -7,6 +7,8 @@ import { Header } from "../Header"
 import { Hero } from '../Hero'
 import { LoadingAnime } from '@/app/Loader/loadingAnime'
 import { AllAppliance } from "../AllAppliance";
+import { StepsToUseApp } from "../StepsToUseApp";
+import { Reviews } from "../Reviews";
 // import { allAppliancesList } from "../../lib/utils"
 
 
@@ -206,7 +208,7 @@ export const Home=()=>{
 
   const onSearchClickTechnicians=async(exactMatch)=>{
     console.log("Search Button is Clicked search exactmatch & selectedCityId!==null",exactMatch,selectedCityId!==null)
-    if(exactMatch && selectedCityId!==null){
+    if(!exactMatch){
       setSearchResultApiSituation(allApiSituations.inProgress)
       const requestData={
         specificCityId:selectedCityId,
@@ -224,13 +226,15 @@ export const Home=()=>{
       }
       const response=await fetch(searchTechniciansApiUrl,options)
       const responseData=await response.json()
+      console.log("Search Result api responseData:",{responseData})
       if(response.ok){
         const fetchedData=responseData.data
         setSearchResult(fetchedData)
         setSearchResultApiSituation(allApiSituations.success)
       }
-    }else{
-      setSearchResultApiSituation(allApiSituations.failure)
+      else{
+        setSearchResultApiSituation(allApiSituations.failure)
+      }
     }
   }
 
@@ -238,12 +242,14 @@ export const Home=()=>{
       return <LoadingAnime className="w-full"/>
     }
 
-    console.log({selectedCityId,searchResult,allCities,allSpecfiedCityAreas,isLoggedOut,apiSituation,areaApiSituation,applianceSearchValue,allSuggestions})
+    console.log({selectedCityId,searchResult,searchResultApiSituation,allCities,allSpecfiedCityAreas,isLoggedOut,apiSituation,areaApiSituation,applianceSearchValue,allSuggestions})
     return (
       <>
         <Header isLoggedOut={isLoggedOut} handleLogout={handleLogout}/>
           <Hero selectedCityId={selectedCityId} onSearchClickTechnicians={onSearchClickTechnicians} setApplianceSearchValue={setApplianceSearchValue} applianceSearchValue={applianceSearchValue} jwtToken={jwtToken} applianceSearchInputEvent={applianceSearchInputEvent} suggestionApiSituation={suggestionApiSituation}  allSuggestions={allSuggestions}  areaApiSituation={areaApiSituation} allSpecfiedCityAreas={allSpecfiedCityAreas} allApiSituations={allApiSituations} allCities={allCities} onCityClick={onCityClick} isLoggedOut={isLoggedOut}/>              
           <AllAppliance allAppliancesList={allAppliancesList}/>
+          <StepsToUseApp/>
+          <Reviews/>
       </>
     )
 }
