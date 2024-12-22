@@ -1,4 +1,4 @@
-
+import { Badge } from "../ui/badge"
 
 export const AllAppliance=(props)=>{
 
@@ -9,7 +9,7 @@ export const AllAppliance=(props)=>{
         <div className="md:p-10 md:pb-[0px] p-5 pb-0 md:max-h-[90vh] bg-[#F5FEFF]">
             <div className="md:top-[-250px] top-[-170px] z-40 relative w-[100%] bg-white p-10 rounded-lg border shadow-xl
             animate__animated animate__fadeInUp">
-                <h1 className="text-4xl mb-2 font-bold">All Appliances</h1>
+                <h1 className="text-4xl mb-2 font-bold"><Badge className={"mb-2"}>WANT TO KNOW</Badge><br/>All Appliances</h1>
                 <p className="text-base mb-7 text-[#525F7F]">The time is now for it to be okay to be great. For being a bright color. For standing out.</p>
                 <div className="justify-center items-start" style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
                     {allAppliancesList.map((appliance) => (
