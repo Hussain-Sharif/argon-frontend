@@ -5,11 +5,11 @@ export const AllAppliance=(props)=>{
     const {allAppliancesList}=props
 
     return(
-        <div className="md:p-20 p-10 h-[95vh] bg-[#F5FEFF]">
-            <div className="top-[-200px] z-30 relative w-[100%] bg-white p-10 rounded-lg border shadow-lg
+        <div className="md:p-20 p-5 min-h-screen bg-[#F5FEFF]">
+            <div className="md:top-[-200px] top-[-170px] z-40 relative w-[100%] bg-white p-10 rounded-lg border shadow-xl
             animate__animated animate__fadeInUp">
                 <h1 className="text-4xl mb-2 font-bold">All Appliances</h1>
-                <p className="text-xl mb-7 text-[#525F7F]">The time is now for it to be okay to be great. For being a bright color. For standing out.</p>
+                <p className="text-base mb-7 text-[#525F7F]">The time is now for it to be okay to be great. For being a bright color. For standing out.</p>
             <div className="justify-center items-start" style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
                 {allAppliancesList.map((appliance) => (
                     <div
@@ -30,7 +30,7 @@ export const AllAppliance=(props)=>{
                     <h3 className="text-2xl mb-2">{appliance.name}</h3>
 
                     {/* Appliance Description */}
-                    <p className="text-[#525F7F] text-left">
+                    <p className="text-[#525F7F] text-base text-left">
                         {appliance.description}
                     </p>
                     </div>

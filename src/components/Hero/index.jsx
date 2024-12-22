@@ -129,17 +129,17 @@ export const Hero = (props) => {
   };
 
   return (
-    <div className="w-full min-h-screen md:min-h-[85vh]  bg-[#BDE4F4] p-4 md:p-10 flex flex-col md:flex-row justify-between items-start">
-      <div className="mt-8 border-none mb-2 ">
-        <h1 className="text-4xl font-bold mb-2">
+    <div className="w-full min-h-[100vh]  bg-[#BDE4F4] p-4 md:p-10 flex flex-col md:flex-row justify-between items-start">
+      <div className="mt-0 border-none mb-2 ">
+        <h1 className="md:text-5xl text-3xl font-bold mb-4">
           Take care of your home needs now! <br />
         </h1>
-        <ReUseText color="#525F7F" mb="5px" className="text-xl">
+        <ReUseText color="#525F7F"  className="text-base">
           Argon is your one-stop solution to troubleshoot, choose a vendor and book a technician.
         </ReUseText>
         <div className="flex flex-col justify-start items-start mt-5">
           <div>
-            <DropdownMenu >
+            <DropdownMenu className="">
             <AlertDialog>
             <AlertDialogTrigger className="outline-none">
               <DropdownMenuTrigger className="mr-4 mb-2" asChild>
@@ -153,7 +153,7 @@ export const Hero = (props) => {
                 allCities.length>0? <DropdownMenuContent className="w-56 ml-4">
                 <DropdownMenuLabel>Currently 10 Cities in INDIA</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuRadioGroup value={position}  onValueChange={(selectedPosition) => handleSelectButton(selectedPosition)}>
+                <DropdownMenuRadioGroup className="" value={position}  onValueChange={(selectedPosition) => handleSelectButton(selectedPosition)}>
                   {allCities.map((city) => {
                     return (
                       <DropdownMenuRadioItem onClick={() => handleSelectButton(city.id)} key={city.id} value={city.id}>
@@ -189,7 +189,7 @@ export const Hero = (props) => {
            Please enter among them
         </h1>}
           <div className="flex flex-row justify-start items-start  ">                
-                <Command className="border-[#CAD1D7] border-2  rounded-md ">
+                <Command className="border-[#CAD1D7] border-2  rounded-md z-50 relative">
               
                   <CommandInput  value={applianceSearchValue}
               onValueChange={(value) => {
@@ -201,7 +201,7 @@ export const Hero = (props) => {
               }}
               placeholder="Search Home Appliances" 
               className="h-10" />
-                  <CommandList className={`${shouldShowList() ?"h-auto max-h-[300px] overflow-y-auto" : "h-0"}`}>
+                  <CommandList className={`${shouldShowList() ?"h-auto max-h-[300px] overflow-y-auto  " : "h-0"}`}>
                   {suggestionApiSituation===allApiSituations.success && <CommandEmpty>No appliances found.</CommandEmpty>}
                   <CommandGroup>
                   {suggestionApiSituation===allApiSituations.success ? (
