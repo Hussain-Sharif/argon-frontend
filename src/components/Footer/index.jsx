@@ -10,7 +10,7 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-          <img className="w-[200px] " alt="logo" src="../../../public/assests/full-logo.png"/>
+          <img className="w-[200px] " alt="logo" src="/assests/full-logo.png"/>
 
             <p className="text-sm">Your trusted partner for all home appliance repairs and maintenance services.</p>
             <div className="flex space-x-4">

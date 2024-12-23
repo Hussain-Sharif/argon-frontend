@@ -42,7 +42,7 @@ const EmptyState = (props) => {
   return(
     <div className="flex flex-col items-center text-center py-2 w-full ">
       <img
-        src="../../../public/assests/empty-search-reusit-img.png" // Replace with a meaningful illustration
+        src="/assests/empty-search-reusit-img.png" // Replace with a meaningful illustration
         alt="No results illustration"
         className="mb-6 w-32"
       />

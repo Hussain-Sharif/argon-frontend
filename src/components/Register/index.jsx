@@ -260,7 +260,7 @@ export const Register = () => {
 
     return (
         <ReUseDiv className="overflow-y-auto" w="100%"  p="30px" display="flex" fD="column" jC="center" aI="center" >
-            <ReUseImage w="250px" m="10px" mb="30px" alt="argon_logo" src="../../../public/assests/full-logo.png" />
+            <ReUseImage w="250px" m="10px" mb="30px" alt="argon_logo" src="/assests/full-logo.png" />
             <Tabs defaultValue="user" className="w-[350px]">
                 <TabsCont activeTab={activeTab} onChangeTab={onChangeTab} />
                 <TabsContent value="user">
