@@ -29,7 +29,7 @@ export const Header=(props)=>{
      const {jwtToken}=cookieData
     return(
         <ReUseDiv w="100%" p="20px" pt="10px" pb="10px" className=" bg-[#EFF6FF]  z-50 sticky top-0 flex flex-row justify-between">
-            <img className="w-[150px] md:w-[170px]" alt="logo" src="../../../public/assests/full-logo.png"/>
+            <img className="w-[150px] md:w-[170px]" alt="logo" src="/assests/full-logo.png"/>
             <ReUseDiv>
                 {jwtToken?
                 <ReUseDiv>
