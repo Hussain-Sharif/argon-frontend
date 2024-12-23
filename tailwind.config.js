@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import tailwindcssAnimate from "tailwindcss-animate";
+
 export default {
   darkMode: ["class"], // Enables dark mode using the 'class' strategy
   content: [
@@ -68,5 +70,5 @@ export default {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")], // Include Shadcn's required plugin
+  plugins: [tailwindcssAnimate], // Include Shadcn's required plugin
 };
