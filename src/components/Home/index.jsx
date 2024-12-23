@@ -10,6 +10,7 @@ import { AllAppliance } from "../AllAppliance";
 import { StepsToUseApp } from "../StepsToUseApp";
 import { Reviews } from "../Reviews";
 import { Footer } from "../Footer";
+import { FeaturedTechnicians } from "../FeaturedTechnicians";
 // import { allAppliancesList } from "../../lib/utils"
 
 
@@ -72,12 +73,17 @@ export const Home=()=>{
   const [allCities,setAllCities]=useState([])
   const [allSpecfiedCityAreas,setAllSpecfiedCityAreas]=useState([])
   const [allSuggestions,setAllSuggestions]=useState([])
+  
   const [applianceSearchValue,setApplianceSearchValue]=useState("")
+  const [searchResult,setSearchResult]=useState([])
+
   const [apiSituation,setApiSituation]=useState(allApiSituations.initial)
   const [areaApiSituation,setAreaApiSituations]=useState(allApiSituations.initial)
   const [suggestionApiSituation,setSuggestionApiSituation]=useState(allApiSituations.initial)
   const [searchResultApiSituation,setSearchResultApiSituation]=useState(allApiSituations.initial)
-  const [searchResult,setSearchResult]=useState([])
+  
+ 
+  
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   // const [noIssueSearch,setNoIssueSearch]=useState(false)
 
@@ -250,6 +256,7 @@ export const Home=()=>{
           <Hero selectedCityId={selectedCityId} onSearchClickTechnicians={onSearchClickTechnicians} setApplianceSearchValue={setApplianceSearchValue} applianceSearchValue={applianceSearchValue} jwtToken={jwtToken} applianceSearchInputEvent={applianceSearchInputEvent} suggestionApiSituation={suggestionApiSituation}  allSuggestions={allSuggestions}  areaApiSituation={areaApiSituation} allSpecfiedCityAreas={allSpecfiedCityAreas} allApiSituations={allApiSituations} allCities={allCities} onCityClick={onCityClick} isLoggedOut={isLoggedOut}/>              
           <AllAppliance allAppliancesList={allAppliancesList}/>
           <StepsToUseApp/>
+          <FeaturedTechnicians searchResult={searchResult}/>
           <Reviews/>
           <Footer/>
       </>

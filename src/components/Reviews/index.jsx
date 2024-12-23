@@ -33,17 +33,18 @@ const reviews = [
 ];
 
 const RatingStars = ({ rating }) => {
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 !== 0;
+
   return (
-    <div className="flex space-x-1">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <span key={star}>
-          {rating >= star ? (
-            <StarIcon className="w-4 h-4 text-yellow-400" />
-          ) : (
-            <StarHalfIcon className="w-4 h-4 text-yellow-400" />
-          )}
-        </span>
+    <div className="flex items-center space-x-1">
+      {[...Array(fullStars)].map((_, i) => (
+        <StarIcon key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
       ))}
+      {hasHalfStar && (
+        <StarIcon className="w-4 h-4 fill-yellow-400/50 text-yellow-400" />
+      )}
+      <Badge className="text-sm font-medium ml-1 rounded-sm">{rating}</Badge>
     </div>
   );
 };

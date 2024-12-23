@@ -2,7 +2,7 @@ import { Badge } from "../ui/badge"
 
 export const StepsToUseApp = () => {
     return(
-        <div className="md:p-20 md:pt-10 pt-0 p-5  min-h-screen bg-[#BDE4F4] flex flex-col justify-center items-center">
+        <div className="md:p-20 md:pt-10 pt-0 p-5  min-h-screen bg-gradient-to-b from-blue-200 to-blue-50 flex flex-col justify-center items-center">
             <h1 className="text-4xl mb-2 font-bold text-left self-start"><Badge className={"mb-2"}>HOW IT WORKS?</Badge><br/>Book a request in 3 simple steps</h1>
             <div className="w-full flex justify-center items-center gap-20 mt-10 flex-wrap">
                 <div className="max-w-80 flex flex-col justify-center items-center gap-4">

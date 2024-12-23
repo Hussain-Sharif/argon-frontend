@@ -34,7 +34,7 @@ const CommandDialog = ({
 
 const CommandInput = React.forwardRef(({ className, ...props }, ref) => (
   <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
-    <HousePlugIcon className="mr-2 h-6 w-6 shrink-0 opacity-50" />
+    <HousePlugIcon className="mr-2 h-6 text-[#6772E5] w-6 shrink-0 opacity-100" />
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
