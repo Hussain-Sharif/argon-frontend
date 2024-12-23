@@ -44,7 +44,7 @@ import { BounceLoadAnime } from "@/app/Loader/bounceLoadAnime"
 import { LoadingAnime } from "@/app/Loader/loadingAnime"
 
 export const Hero = (props) => {
-  const {selectedCityId,jwtToken, onSearchClickTechnicians, allCities,onCityClick,areaApiSituation,allSpecfiedCityAreas,allApiSituations,applianceSearchValue,applianceSearchInputEvent,suggestionApiSituation,allSuggestions,setApplianceSearchValue } = props
+  const {searchResultApiSituation,selectedCityId,jwtToken, onSearchClickTechnicians, allCities,onCityClick,areaApiSituation,allSpecfiedCityAreas,allApiSituations,applianceSearchValue,applianceSearchInputEvent,suggestionApiSituation,allSuggestions,setApplianceSearchValue } = props
   const navigate=useNavigate()
 
   const [position, setPosition] = useState(null)
@@ -112,6 +112,8 @@ export const Hero = (props) => {
     setShowInvalidSearchAlert(false);
   }, [applianceSearchValue]); // when value changes the alert should be hidden
 
+
+
   // Handle search button click
   const handleSearchClick = () => {
     const hasExactMatch = getExactMatch()?selectedCityId===null:true ;
@@ -129,7 +131,7 @@ export const Hero = (props) => {
   };
 
   return (
-    <div className="w-full relative max-h-fit  overflow-hidden bg-gradient-to-b from-blue-50 to-blue-100 p-4 md:p-10 flex flex-col md:flex-row justify-between items-start">
+    <div  className="w-full relative max-h-fit  overflow-hidden bg-gradient-to-b from-blue-50 to-blue-100 p-4 md:p-10 flex flex-col md:flex-row justify-between items-start">
       <div className="mt-0 border-none mb-2 ">
         <h1 className="md:text-5xl text-3xl font-bold mb-4">
           Take care of your home needs now! <br />
@@ -253,11 +255,11 @@ export const Hero = (props) => {
         </div>
     </div>
     <div className="relative hidden lg:inline-block">
-          <div className="absolute inset-0 bg-blue-800/10 rounded-3xl transform rotate-3" />
-          <div className="absolute inset-0 bg-blue-800/10 rounded-3xl transform -rotate-3" />
+          <div className=" absolute inset-0 bg-blue-800/10 rounded-3xl transform rotate-3" />
+          <div className="  absolute inset-0 bg-blue-800/10 rounded-3xl transform -rotate-3" />
           <img
             alt="Home services illustration"
-            className="relative rounded-3xl object-cover"
+            className="relative rounded-3xl object-cover animate__animated animate__bounce"
             src="/assests/hero_image.png"
             width={580}
             height={580}
@@ -268,276 +270,5 @@ export const Hero = (props) => {
 }
 
 
-// 'use client'
 
-// import { useState, useEffect } from "react"
-// import { ChevronDown, Search, X } from 'lucide-react'
-// import { useNavigate } from "react-router-dom"
-// import { Button } from "@/components/ui/button"
-// import { Badge } from "@/components/ui/badge"
-// import {
-//   Command,
-//   CommandEmpty,
-//   CommandGroup,
-//   CommandInput,
-//   CommandItem,
-//   CommandList,
-// } from "@/components/ui/command"
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuLabel,
-//   DropdownMenuRadioGroup,
-//   DropdownMenuRadioItem,
-//   DropdownMenuSeparator,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu"
-// import {
-//   AlertDialog,
-//   AlertDialogAction,
-//   AlertDialogCancel,
-//   AlertDialogContent,
-//   AlertDialogDescription,
-//   AlertDialogFooter,
-//   AlertDialogHeader,
-//   AlertDialogTitle,
-//   AlertDialogTrigger,
-// } from "@/components/ui/alert-dialog"
-// import {
-//   Card,
-//   CardContent,
-// } from "@/components/ui/card"
-
-// export const Hero = (props) => {
-//   const {
-//     selectedCityId,
-//     jwtToken,
-//     onSearchClickTechnicians,
-//     allCities,
-//     onCityClick,
-//     areaApiSituation,
-//     allSpecfiedCityAreas,
-//     allApiSituations,
-//     applianceSearchValue,
-//     suggestionApiSituation,
-//     allSuggestions,
-//     setApplianceSearchValue
-//   } = props
-
-//   const navigate = useNavigate()
-//   const [position, setPosition] = useState(null)
-//   const [isInputFocused, setIsInputFocused] = useState(false)
-//   const [showInvalidSearchAlert, setShowInvalidSearchAlert] = useState(false)
-
-//   const handleSelectButton = (selectedPosition) => {
-//     setPosition(selectedPosition)
-//     if (allCities.length > 0 && selectedPosition) {
-//       onCityClick(selectedPosition)
-//     }
-//   }
-
-//   const handleFormatingOfAreaName = (cityAreasList) => {
-//     const formatedAreaValue = cityAreasList.map((eachAreaObj) => eachAreaObj.areaName)
-//     return formatedAreaValue.length > 1
-//       ? "Only in " + formatedAreaValue.slice(0, -1).join(", ") + " & " + formatedAreaValue[formatedAreaValue.length - 1]
-//       : formatedAreaValue.length === 1
-//       ? "Only in " + formatedAreaValue[0]
-//       : "Sorry No Technicians available for this city"
-//   }
-
-//   const switchAreaSpecifiedSituation = (areaApiSituation) => {
-//     switch (areaApiSituation) {
-//       case allApiSituations.initial:
-//         return "Areas Covered for chosen City"
-//       case allApiSituations.inProgress:
-//         return "Loading areas..."
-//       case allApiSituations.success:
-//         return handleFormatingOfAreaName(allSpecfiedCityAreas)
-//       case allApiSituations.failure:
-//         return "Something went wrong please Refresh the Page"
-//       default:
-//         return ""
-//     }
-//   }
-
-//   const getExactMatch = () => {
-//     if (!allSuggestions || !applianceSearchValue) return false
-//     return allSuggestions.some(
-//       suggestion => suggestion.applianceName.toLowerCase() === applianceSearchValue.toLowerCase()
-//     )
-//   }
-
-//   useEffect(() => {
-//     setShowInvalidSearchAlert(false)
-//   }, [applianceSearchValue])
-
-//   const handleSearchClick = () => {
-//     const hasExactMatch = getExactMatch() ? selectedCityId === null : true
-//     setShowInvalidSearchAlert(hasExactMatch)
-//     onSearchClickTechnicians(hasExactMatch)
-//   }
-
-//   const shouldShowList = () => {
-//     if (suggestionApiSituation === allApiSituations.inProgress) return true
-//     if (suggestionApiSituation !== allApiSituations.success) return false
-//     if (!isInputFocused) return false
-//     return !getExactMatch()
-//   }
-
-//   return (
-//     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-blue-50 to-blue-100">
-//       <div className="absolute inset-0 bg-grid-blue-500/[0.025] -z-10" />
-//       <div className="container mx-auto px-4 py-8 md:py-24">
-//         <div className="grid gap-8 lg:grid-cols-2 lg:gap-16 items-center">
-//           <div className="space-y-8">
-//             <div className="space-y-4">
-//               <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-//                 Take care of your home needs now!
-//               </h1>
-//               <p className="text-gray-500 md:text-xl">
-//                 Argon is your one-stop solution to troubleshoot, choose a vendor and book a technician.
-//               </p>
-//             </div>
-
-//             <Card className="border-2 border-blue-100">
-//               <CardContent className="p-6 space-y-4">
-//                 <div className="space-y-2">
-//                   <AlertDialog>
-//                     <AlertDialogTrigger asChild>
-//                       <DropdownMenu>
-//                         <DropdownMenuTrigger asChild>
-//                           <Button variant="outline" className="w-full justify-between">
-//                             {allCities.find((city) => city.id === position)?.cityName || "Select City"}
-//                             <ChevronDown className="ml-2 h-4 w-4" />
-//                           </Button>
-//                         </DropdownMenuTrigger>
-//                         {allCities.length > 0 ? (
-//                           <DropdownMenuContent className="w-full min-w-[200px]">
-//                             <DropdownMenuLabel>Currently 10 Cities in INDIA</DropdownMenuLabel>
-//                             <DropdownMenuSeparator />
-//                             <DropdownMenuRadioGroup value={position} onValueChange={handleSelectButton}>
-//                               {allCities.map((city) => (
-//                                 <DropdownMenuRadioItem key={city.id} value={city.id}>
-//                                   {city.cityName}
-//                                 </DropdownMenuRadioItem>
-//                               ))}
-//                             </DropdownMenuRadioGroup>
-//                           </DropdownMenuContent>
-//                         ) : (
-//                           <AlertDialogContent>
-//                             <AlertDialogHeader>
-//                               <div className="space-y-2">
-//                                 <AlertDialogTitle>We request please log-in</AlertDialogTitle>
-//                                 <AlertDialogDescription>
-//                                   Haven't created an account? You can Register with necessary credentials
-//                                 </AlertDialogDescription>
-//                               </div>
-//                               <AlertDialogCancel className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-//                                 <X className="h-4 w-4" />
-//                                 <span className="sr-only">Close</span>
-//                               </AlertDialogCancel>
-//                             </AlertDialogHeader>
-//                             <AlertDialogFooter>
-//                               <Button onClick={() => navigate("/login")} variant="outline">
-//                                 Log-in
-//                               </Button>
-//                               <Button onClick={() => navigate("/register")}>Sign-Up/Register</Button>
-//                             </AlertDialogFooter>
-//                           </AlertDialogContent>
-//                         )}
-//                       </DropdownMenu>
-//                     </AlertDialogTrigger>
-//                   </AlertDialog>
-
-//                   <Badge variant="secondary" className="w-full justify-center text-sm">
-//                     {switchAreaSpecifiedSituation(areaApiSituation)}
-//                   </Badge>
-//                 </div>
-
-//                 <div className="space-y-2">
-//                   <p className="text-sm font-medium text-gray-500">Please enter among them</p>
-//                   <div className="flex gap-2">
-//                     <Command className="border rounded-lg flex-1">
-//                       <CommandInput
-//                         value={applianceSearchValue}
-//                         onValueChange={setApplianceSearchValue}
-//                         onFocus={() => setIsInputFocused(true)}
-//                         onBlur={() => setTimeout(() => setIsInputFocused(false))}
-//                         placeholder="Search Home Appliances"
-//                       />
-//                       <CommandList className={shouldShowList() ? "h-auto max-h-[300px]" : "h-0"}>
-//                         {suggestionApiSituation === allApiSituations.success && (
-//                           <CommandEmpty>No appliances found.</CommandEmpty>
-//                         )}
-//                         <CommandGroup>
-//                           {suggestionApiSituation === allApiSituations.success &&
-//                             allSuggestions.map((suggestion, index) => (
-//                               <CommandItem
-//                                 key={index}
-//                                 value={suggestion.applianceName}
-//                                 onSelect={(value) => {
-//                                   setApplianceSearchValue(value)
-//                                   setIsInputFocused(false)
-//                                 }}
-//                               >
-//                                 {suggestion.applianceName}
-//                               </CommandItem>
-//                             ))}
-//                           {suggestionApiSituation === allApiSituations.inProgress && jwtToken && (
-//                             <CommandItem>Searching for appliances...</CommandItem>
-//                           )}
-//                         </CommandGroup>
-//                       </CommandList>
-//                     </Command>
-
-//                     <AlertDialog open={showInvalidSearchAlert}>
-//                       <AlertDialogTrigger asChild>
-//                         <Button onClick={handleSearchClick}>
-//                           <Search className="h-4 w-4 mr-2" />
-//                           Search
-//                         </Button>
-//                       </AlertDialogTrigger>
-//                       <AlertDialogContent>
-//                         <AlertDialogHeader>
-//                           <AlertDialogTitle>
-//                             {selectedCityId === null
-//                               ? "Please Choose a city"
-//                               : "Please Select/Enter among provided appliances"}
-//                           </AlertDialogTitle>
-//                           <AlertDialogDescription>
-//                             {selectedCityId === null
-//                               ? "It helps to identify available areas"
-//                               : "We are limited with the search feature, Kindly understand."}
-//                           </AlertDialogDescription>
-//                         </AlertDialogHeader>
-//                         <AlertDialogFooter>
-//                           <Button variant="outline" onClick={() => setShowInvalidSearchAlert(false)}>
-//                             Cancel
-//                           </Button>
-//                           <Button onClick={() => setShowInvalidSearchAlert(false)}>Sure</Button>
-//                         </AlertDialogFooter>
-//                       </AlertDialogContent>
-//                     </AlertDialog>
-//                   </div>
-//                 </div>
-//               </CardContent>
-//             </Card>
-//           </div>
-
-//           <div className="relative hidden lg:block">
-//             <div className="absolute inset-0 bg-blue-500/10 rounded-3xl transform rotate-3" />
-//             <div className="absolute inset-0 bg-blue-500/10 rounded-3xl transform -rotate-3" />
-//             <img
-//               alt="Home services illustration"
-//               className="relative rounded-3xl object-cover"
-//               src="/assests/hero_image.png"
-//               width={580}
-//               height={580}
-//             />
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
 

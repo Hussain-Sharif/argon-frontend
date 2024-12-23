@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Cookies from "js-cookie"
 import { AirVent, Flame, LucideMicrowave, Refrigerator, Tv, WashingMachine } from "lucide-react";
 
@@ -68,6 +68,23 @@ export const allAppliancesList = [
 
 
 export const Home=()=>{
+
+  const heroRef =useRef(null)
+  const FeaturedTechniciansRef=useRef(null)
+
+  const scrollToHero = () => {
+    const offset = heroRef.current - 80; 
+  window.scrollTo({ top: offset, behavior:"smooth" });
+  };
+  
+  const scrollToFeaturedTechnicians = () => {
+    if (FeaturedTechniciansRef.current) {
+        const offset = FeaturedTechniciansRef.current.offsetTop - 80;
+        window.scrollTo({ top: offset, behavior: "smooth" });
+    } else {
+        console.warn("FeaturedTechniciansRef is not attached to a DOM element.");
+    }
+};
 
   const [selectedCityId,setSelectedCityId]=useState(null)
   const [allCities,setAllCities]=useState([])
@@ -214,14 +231,14 @@ export const Home=()=>{
 
 
   const onSearchClickTechnicians=async(exactMatch)=>{
-    console.log("Search Button is Clicked search exactmatch & selectedCityId!==null",exactMatch,selectedCityId!==null)
+    //console.log("Search Button is Clicked search exactmatch & selectedCityId!==null",exactMatch,selectedCityId!==null)
     if(!exactMatch){
       setSearchResultApiSituation(allApiSituations.inProgress)
       const requestData={
         specificCityId:selectedCityId,
         applianceId:allSuggestions.filter(eachSuggestionObj=>eachSuggestionObj.applianceName===applianceSearchValue)[0].applianceId
       }
-      console.log("After exactMatch is made for API data",{requestData})
+      // console.log("After exactMatch is made for API data",{requestData})
       const searchTechniciansApiUrl="https://argonbackend-production.up.railway.app/api/v1/technician/featured-technicians"
       const options={
         method:"POST",
@@ -233,11 +250,12 @@ export const Home=()=>{
       }
       const response=await fetch(searchTechniciansApiUrl,options)
       const responseData=await response.json()
-      console.log("Search Result api responseData:",{responseData})
+      //console.log("Search Result api responseData:",{responseData})
       if(response.ok){
         const fetchedData=responseData.data
         setSearchResult(fetchedData)
         setSearchResultApiSituation(allApiSituations.success)
+        scrollToFeaturedTechnicians()
       }
       else{
         setSearchResultApiSituation(allApiSituations.failure)
@@ -249,14 +267,14 @@ export const Home=()=>{
       return <LoadingAnime className="w-full"/>
     }
 
-    console.log({selectedCityId,searchResult,searchResultApiSituation,allCities,allSpecfiedCityAreas,isLoggedOut,apiSituation,areaApiSituation,applianceSearchValue,allSuggestions})
+    //console.log({selectedCityId,searchResult,searchResultApiSituation,allCities,allSpecfiedCityAreas,isLoggedOut,apiSituation,areaApiSituation,applianceSearchValue,allSuggestions})
     return (
       <>
         <Header isLoggedOut={isLoggedOut} handleLogout={handleLogout}/>
-          <Hero selectedCityId={selectedCityId} onSearchClickTechnicians={onSearchClickTechnicians} setApplianceSearchValue={setApplianceSearchValue} applianceSearchValue={applianceSearchValue} jwtToken={jwtToken} applianceSearchInputEvent={applianceSearchInputEvent} suggestionApiSituation={suggestionApiSituation}  allSuggestions={allSuggestions}  areaApiSituation={areaApiSituation} allSpecfiedCityAreas={allSpecfiedCityAreas} allApiSituations={allApiSituations} allCities={allCities} onCityClick={onCityClick} isLoggedOut={isLoggedOut}/>              
+          <Hero ref={heroRef}  searchResultApiSituation={searchResultApiSituation} selectedCityId={selectedCityId} onSearchClickTechnicians={onSearchClickTechnicians} setApplianceSearchValue={setApplianceSearchValue} applianceSearchValue={applianceSearchValue} jwtToken={jwtToken} applianceSearchInputEvent={applianceSearchInputEvent} suggestionApiSituation={suggestionApiSituation}  allSuggestions={allSuggestions}  areaApiSituation={areaApiSituation} allSpecfiedCityAreas={allSpecfiedCityAreas} allApiSituations={allApiSituations} allCities={allCities} onCityClick={onCityClick} isLoggedOut={isLoggedOut}/>              
           <AllAppliance allAppliancesList={allAppliancesList}/>
           <StepsToUseApp/>
-          <FeaturedTechnicians searchResult={searchResult}/>
+          <FeaturedTechnicians ref={FeaturedTechniciansRef}  scrollToHero={scrollToHero} searchResult={searchResult}/>
           <Reviews/>
           <Footer/>
       </>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -37,7 +37,9 @@ const technicians = [
   // Add more technicians as needed
 ];
 
-const EmptyState = () => (
+const EmptyState = (props) => {
+  const {scrollToHero}=props
+  return(
     <div className="flex flex-col items-center text-center py-2 w-full ">
       <img
         src="../../../public/assests/empty-search-reusit-img.png" // Replace with a meaningful illustration
@@ -50,9 +52,9 @@ const EmptyState = () => (
       <p className="text-gray-600 max-w-md">
         Enter specific keywords in the search bar to find technicians that match your requirements.
       </p>
-      <Button className="mt-2"><ArrowBigUpDash size={80}/> Let's Search</Button>
+      <Button onClick={scrollToHero} className="mt-2"><ArrowBigUpDash size={80}/> Let's Search</Button>
     </div>
-  );
+  )};
   
 
 const RatingDisplay = ({ rating }) => {
@@ -72,14 +74,17 @@ const RatingDisplay = ({ rating }) => {
   );
 };
 
-export const FeaturedTechnicians = (props) => {
+export const FeaturedTechnicians = React.forwardRef((props, ref) => {
+    const {searchResult,scrollToHero}=props
 
-    const {searchResult}=props
+    
+
+    
 
     const technicians = searchResult.length>0 ? searchResult : [];
 
   return (
-    <section className="py-16 bg-gradient-to-b from-[#EDF5FF] to-[#F5FEFF]">
+    <section ref={ref} className="py-16 bg-gradient-to-b from-[#EDF5FF] to-[#F5FEFF]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <Badge className="mb-4">EXPERT TECHNICIANS</Badge>
@@ -133,9 +138,9 @@ export const FeaturedTechnicians = (props) => {
             </Card>
           ))}
         </div>
-        {technicians.length === 0 && <EmptyState />}
+        {technicians.length === 0 && <EmptyState scrollToHero={scrollToHero}/>}
       </div>
     </section>
   );
-};
+});
 

@@ -66,12 +66,12 @@ export const Login=()=>{
         const response=await fetch(url,options)
         const fetchedData=await response.json()
         if(response.ok===true){
-            console.log(fetchedData.data.jwtToken,"It's True==>",fetchedData)
+            //console.log(fetchedData.data.jwtToken,"It's True==>",fetchedData)
             Cookies.set("jwtTokenData",JSON.stringify(fetchedData.data),{ expires: 7, path: '/' })
             setApiResponse({inProgress:false})
             navigate("/",{replace:true})
         }else{
-            console.log("Error ==>",fetchedData)
+            //console.log("Error ==>",fetchedData)
             setApiResponse({isError:true,errorMsg:fetchedData.message,inProgress:false})
         }
     }
@@ -113,7 +113,7 @@ export const Login=()=>{
                 <form onSubmit={makeApiForLogin}>
                 <Card   className="w-[350px]">
                     <CardHeader>
-                        <CardTitle>Vendor Login</CardTitle>
+                        <CardTitle>Vendor/Technician Login</CardTitle>
                         <CardDescription>Please enter your credentials</CardDescription>
                     </CardHeader>
                     <CardContent>

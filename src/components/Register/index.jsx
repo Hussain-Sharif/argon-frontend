@@ -203,7 +203,7 @@ export const Register = () => {
         setApiResponse({ inProgress: true })
         const imageEncoded=new FormData()
         imageEncoded.append("image",vendorImage)
-        console.log("==>",imageEncoded.get("image"))
+        //console.log("==>",imageEncoded.get("image"))
         // const userDetails = activeTab == "user" ? { email, username, password } : { email, name: username, password, mobile, description , image:vendorImage, city:allCities,areas:allAreas,services:allServices}
         // console.log(userDetails)
         imageEncoded.append("email", email);
@@ -217,20 +217,27 @@ export const Register = () => {
             imageEncoded.append("areas", allAreas);
             imageEncoded.append("services", allServices);
         }
+        const userBody={
+            email,username,password
+        }
+        //console.log("imageEncoded", imageEncoded,email,username,password,userBody)
+        
+        const userJson=activeTab !== "user"? imageEncoded: JSON.stringify(userBody)
         const options = {
             method: "POST",
-            
-            body: imageEncoded,
-        }
+            headers: activeTab === "user" ? { "Content-Type": "application/json" } : undefined,
+            body: userJson,
+        };
+        
         const url = activeTab == "user" ? "https://argonbackend-production.up.railway.app/api/v1/user/user-register/" : "https://argonbackend-production.up.railway.app/api/v1/technician/technician-register"
         const response = await fetch(url, options)
         const fetchedData = await response.json()
         if (response.ok === true) {
-            console.log(fetchedData.data.jwtToken, "It's True==>", fetchedData)
+            //console.log(fetchedData.data, "It's True==>", fetchedData)
             setApiResponse({ inProgress: false })
             navigate("/login")
         } else {
-            console.log("Error ==>", fetchedData)
+            //console.log("Error ==>", fetchedData)
             setApiResponse({ isError: true, errorMsg: fetchedData.message, inProgress: false })
         }
     }
@@ -291,7 +298,7 @@ export const Register = () => {
                     <form onSubmit={makeApiForRegister}>
                         <Card className="w-[350px]">
                             <CardHeader>
-                                <CardTitle>Vendor Sign Up</CardTitle>
+                                <CardTitle>Vendor/Technician Sign Up</CardTitle>
                                 <CardDescription>Register as Vendor with required credentails</CardDescription>
                             </CardHeader>
                             <CardContent>

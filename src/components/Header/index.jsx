@@ -14,11 +14,11 @@ export const Header=(props)=>{
 
     
     let cookieData=Cookies.get("jwtTokenData") || false
-    console.log("Header islogout ",isLoggedOut,cookieData)
+    //console.log("Header islogout ",isLoggedOut,cookieData)
 
     if (cookieData && !isLoggedOut) {
         cookieData=JSON.parse(cookieData)
-     console.log("Cookie Data from Header Component:",{cookieData})
+     //console.log("Cookie Data from Header Component:",{cookieData})
       }
      
      const userData={
