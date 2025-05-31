@@ -191,7 +191,7 @@ export const Home=()=>{
         setAllSpecfiedCityAreas(formatedData)
         setSelectedCityId(cityId)
       }else{
-        setAreaApiSituation(allApiSituations.failure)
+        setAreaApiSituations(allApiSituations.failure)
         // console.log("Error ==>",response.data)
       }
   }
