@@ -229,7 +229,7 @@ export const Register = () => {
             body: userJson,
         };
         
-        const url = activeTab == "user" ? "https://argonbackend-production.up.railway.app/api/v1/user/user-register/" : "https://argonbackend-production.up.railway.app/api/v1/technician/technician-register"
+        const url = activeTab == "user" ? "https://argon-backend-k5jg.onrender.com/api/v1/user/user-register/" : "https://argon-backend-k5jg.onrender.com/api/v1/technician/technician-register"
         const response = await fetch(url, options)
         const fetchedData = await response.json()
         if (response.ok === true) {

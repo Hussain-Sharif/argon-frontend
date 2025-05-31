@@ -62,7 +62,7 @@ export const Login=()=>{
               },
               body: JSON.stringify(userDetails),
             }
-        const url=activeTab=="user"?"https://argonbackend-production.up.railway.app/api/v1/user/user-login/":"https://argonbackend-production.up.railway.app/api/v1/technician/technician-login/"
+        const url=activeTab=="user"?"https://argon-backend-k5jg.onrender.com/api/v1/user/user-login/":"https://argon-backend-k5jg.onrender.com/api/v1/technician/technician-login/"
         const response=await fetch(url,options)
         const fetchedData=await response.json()
         if(response.ok===true){
