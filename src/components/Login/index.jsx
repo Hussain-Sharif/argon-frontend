@@ -19,6 +19,7 @@ import { Loader2 } from "lucide-react"
 
 import { ReUseDiv, ReUseImage, ReUseText } from "../ReusableStyledComponents"
 import { TabsCont } from "../Tabs"
+import { backendApiUrl } from "@/main"
 
 
 
@@ -62,13 +63,18 @@ export const Login=()=>{
               },
               body: JSON.stringify(userDetails),
             }
-        const url=activeTab=="user"?"https://argon-backend-k5jg.onrender.com/api/v1/user/user-login/":"https://argon-backend-k5jg.onrender.com/api/v1/technician/technician-login/"
+        const url=activeTab=="user"?`${backendApiUrl}/api/v1/user/user-login/`:`${backendApiUrl}/api/v1/technician/technician-login/`
         const response=await fetch(url,options)
         const fetchedData=await response.json()
         if(response.ok===true){
             //console.log(fetchedData.data.jwtToken,"It's True==>",fetchedData)
-            Cookies.set("jwtTokenData",JSON.stringify(fetchedData.data),{ expires: 7, path: '/' })
+            const jwtTokenData=JSON.stringify(fetchedData.data)
+            Cookies.set("jwtTokenData",jwtTokenData,{ expires: 7, path: '/' })
+            const type=jwtTokenData?JSON.parse(jwtTokenData).type:""
             setApiResponse({inProgress:false})
+            if(type==="technician"){
+                navigate("/dashboard",{replace:true})
+            }
             navigate("/",{replace:true})
         }else{
             //console.log("Error ==>",fetchedData)

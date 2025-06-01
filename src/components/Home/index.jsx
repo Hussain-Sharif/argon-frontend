@@ -11,6 +11,7 @@ import { StepsToUseApp } from "../StepsToUseApp";
 import { Reviews } from "../Reviews";
 import { Footer } from "../Footer";
 import { FeaturedTechnicians } from "../FeaturedTechnicians";
+import { backendApiUrl } from "@/main";
 // import { allAppliancesList } from "../../lib/utils"
 
 
@@ -133,7 +134,7 @@ export const Home=()=>{
     const getAllCities=async()=>{
         setApiSituation(allApiSituations.inProgress)
         // console.log("In home:",{jwtToken})
-        const urlAllCities="https://argon-backend-k5jg.onrender.com/api/v1/city/all-cities"
+        const urlAllCities=`${backendApiUrl}/api/v1/city/all-cities`
         const options={
           method:"GET",
           headers:{
@@ -165,7 +166,7 @@ export const Home=()=>{
      async function onCityClick (cityId){
       // console.log("onClick is executing......<======")
       setAreaApiSituations(allApiSituations.inProgress)
-      const specifiedCityAreasApiUrl="https://argon-backend-k5jg.onrender.com/api/v1/city/chosen-city-area"
+      const specifiedCityAreasApiUrl=`${backendApiUrl}/api/v1/city/chosen-city-area`
       
       const options={
         method:"POST",
@@ -200,7 +201,7 @@ export const Home=()=>{
     
     const getSuggestions=async()=>{
       setSuggestionApiSituation(allApiSituations.inProgress)
-      const suggestionApiUrl="https://argon-backend-k5jg.onrender.com/api/v1/appliance/appliance-suggestions"
+      const suggestionApiUrl=`${backendApiUrl}/api/v1/appliance/appliance-suggestions`
       const options={
         method:"POST",
         headers:{
@@ -239,7 +240,7 @@ export const Home=()=>{
         applianceId:allSuggestions.filter(eachSuggestionObj=>eachSuggestionObj.applianceName===applianceSearchValue)[0].applianceId
       }
       // console.log("After exactMatch is made for API data",{requestData})
-      const searchTechniciansApiUrl="https://argon-backend-k5jg.onrender.com/api/v1/technician/featured-technicians"
+      const searchTechniciansApiUrl=`${backendApiUrl}/api/v1/technician/featured-technicians`
       const options={
         method:"POST",
         headers:{

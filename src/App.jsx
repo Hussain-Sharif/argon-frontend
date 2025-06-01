@@ -6,6 +6,9 @@ import './App.css'
 // import { Login } from './components/Login'
 import { ReUseDiv } from './components/ReusableStyledComponents'
 import { Button } from './components/ui/button';
+import { ProtectedRoutes } from './components/ProtectedRoutes';
+import { Dashboard } from './components/Dashboard';
+import { ProtectedRoutesVendor } from './components/ProtectedRoutesVendor';
 // import { Home } from './components/Home'
 // import { Register } from './components/Register'
 
@@ -34,7 +37,8 @@ function App() {
     <BrowserRouter>
       <Suspense fallback={<LoadingAnime />}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<ProtectedRoutes element={Home} />} />
+          <Route path='/dashboard' element={<ProtectedRoutesVendor element={Dashboard} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
